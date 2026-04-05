@@ -1,0 +1,35 @@
+name: 每日收盘 A股板块数据抓取
+
+on:
+  schedule:
+    # 北京时间 15:35 = UTC 07:35，周一到周五
+    - cron: '35 7 * * 1-5'
+  workflow_dispatch:   # 支持手动触发
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # 允许推送到仓库
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Fetch sector data
+        run: python fetch_sectors.py
+
+      - name: Commit & push data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/sectors.json
+          # 只有有变化时才提交
+          git diff --staged --quiet && echo "No changes to commit" || \
+            git commit -m "data: A股板块收盘数据 $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M')"
+          git push

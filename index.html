@@ -18,313 +18,145 @@
       --muted: #6e7681;
       --accent: #58a6ff;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+      background: var(--bg); color: var(--text); min-height: 100vh;
     }
 
-    /* ── Header ─────────────────────────────── */
+    /* ── Header ── */
     header {
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      padding: 18px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 18px 24px; display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 12px;
     }
     header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: .03em; }
     header h1 span { color: var(--accent); }
-
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-size: .82rem;
-      color: var(--muted);
-    }
+    .meta { display: flex; align-items: center; gap: 16px; font-size: .82rem; color: var(--muted); flex-wrap: wrap; }
     .status-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--flat);
-      display: inline-block;
-      margin-right: 4px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--flat);
+      display: inline-block; margin-right: 4px;
     }
     .status-dot.live { background: var(--up); box-shadow: 0 0 6px var(--up); animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-    /* ── Tabs ────────────────────────────────── */
+    .data-badge {
+      padding: 3px 10px; border-radius: 12px; font-size: .76rem;
+      border: 1px solid var(--border); color: var(--muted);
+    }
+    .data-badge.cached { border-color: #3fb950; color: #3fb950; }
+    .data-badge.live   { border-color: var(--up); color: var(--up); }
+
+    /* ── Tabs ── */
     .tabs {
-      display: flex;
-      gap: 4px;
-      padding: 16px 24px 0;
-      border-bottom: 1px solid var(--border);
-      background: var(--card);
-      overflow-x: auto;
+      display: flex; gap: 4px; padding: 16px 24px 0;
+      border-bottom: 1px solid var(--border); background: var(--card); overflow-x: auto;
     }
     .tab-btn {
-      padding: 8px 18px;
-      border: none;
-      background: none;
-      color: var(--muted);
-      cursor: pointer;
-      font-size: .9rem;
-      border-bottom: 2px solid transparent;
-      transition: all .2s;
-      white-space: nowrap;
+      padding: 8px 18px; border: none; background: none; color: var(--muted);
+      cursor: pointer; font-size: .9rem; border-bottom: 2px solid transparent;
+      transition: all .2s; white-space: nowrap;
     }
     .tab-btn:hover { color: var(--text); }
     .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-    /* ── Sort Bar ────────────────────────────── */
+    /* ── Toolbar ── */
     .toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 24px;
-      gap: 12px;
-      flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px; gap: 12px; flex-wrap: wrap;
     }
     .sort-btns { display: flex; gap: 6px; }
     .sort-btn {
-      padding: 4px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: none;
-      color: var(--muted);
-      cursor: pointer;
-      font-size: .8rem;
-      transition: all .2s;
+      padding: 4px 12px; border: 1px solid var(--border); border-radius: 6px;
+      background: none; color: var(--muted); cursor: pointer; font-size: .8rem; transition: all .2s;
     }
     .sort-btn:hover { color: var(--text); border-color: var(--accent); }
     .sort-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
     .refresh-btn {
-      padding: 5px 14px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: none;
-      color: var(--muted);
-      cursor: pointer;
-      font-size: .82rem;
-      display: flex; align-items: center; gap: 6px;
-      transition: all .2s;
+      padding: 5px 14px; border: 1px solid var(--border); border-radius: 6px;
+      background: none; color: var(--muted); cursor: pointer; font-size: .82rem;
+      display: flex; align-items: center; gap: 6px; transition: all .2s;
     }
     .refresh-btn:hover { color: var(--text); border-color: var(--accent); }
-    .refresh-btn svg { transition: transform .4s; }
     .refresh-btn.spinning svg { animation: spin .6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Summary Cards ───────────────────────── */
+    /* ── Summary ── */
     .summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-      padding: 0 24px 16px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px; padding: 0 24px 16px;
     }
-    .s-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      text-align: center;
-    }
+    .s-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; text-align: center; }
     .s-card .s-label { font-size: .75rem; color: var(--muted); margin-bottom: 4px; }
     .s-card .s-val { font-size: 1.3rem; font-weight: 700; }
     .s-card .s-val.up { color: var(--up); }
     .s-card .s-val.down { color: var(--down); }
 
-    /* ── Grid / List ─────────────────────────── */
+    /* ── Normal board ── */
     #board-container {
       padding: 0 24px 24px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 8px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 8px;
     }
-
     .sector-row {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: border-color .2s;
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 14px; display: flex; align-items: center; gap: 10px; transition: border-color .2s;
     }
     .sector-row:hover { border-color: var(--accent); }
-
     .s-rank { width: 24px; text-align: center; font-size: .75rem; color: var(--muted); flex-shrink: 0; }
-    .s-name {
-      flex: 0 0 110px;
-      font-size: .88rem;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .bar-wrap {
-      flex: 1;
-      height: 8px;
-      background: var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
+    .s-name { flex: 0 0 110px; font-size: .88rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
     .bar-fill.up   { background: var(--up); }
     .bar-fill.down { background: var(--down); }
     .bar-fill.flat { background: var(--flat); }
-
-    .s-pct {
-      width: 58px;
-      text-align: right;
-      font-size: .9rem;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
+    .s-pct { width: 58px; text-align: right; font-size: .9rem; font-weight: 700; flex-shrink: 0; }
     .s-pct.up   { color: var(--up); }
     .s-pct.down { color: var(--down); }
     .s-pct.flat { color: var(--flat); }
 
-    /* ── Loading / Error ─────────────────────── */
-    #loading {
-      text-align: center;
-      padding: 60px 24px;
-      color: var(--muted);
-      font-size: .9rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-    .spinner {
-      width: 32px; height: 32px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
-    #error-msg {
-      display: none;
-      padding: 20px 24px;
-      background: rgba(240,74,74,.08);
-      border: 1px solid rgba(240,74,74,.3);
-      border-radius: 8px;
-      margin: 0 24px;
-      color: var(--up);
-      font-size: .88rem;
-    }
-
-    /* ── Heat Map View ───────────────────────── */
-    #board-container.heatmap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: flex-start;
-    }
+    /* ── Heatmap ── */
+    #board-container.heatmap { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; }
     #board-container.heatmap .sector-row {
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      padding: 10px 8px;
-      width: auto;
-      cursor: default;
-      border-radius: 6px;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; padding: 10px 8px; width: auto; border-radius: 6px;
     }
     #board-container.heatmap .s-rank { display: none; }
     #board-container.heatmap .s-name { flex: unset; font-size: .82rem; text-align: center; width: 80px; }
     #board-container.heatmap .bar-wrap { display: none; }
-    #board-container.heatmap .s-pct { width: auto; font-size: .9rem; }
+    #board-container.heatmap .s-pct { width: auto; }
 
-    /* ── Big Sector View ─────────────────────── */
-    #big-container {
-      padding: 0 24px 32px;
-      display: none;
-    }
-    #big-toolbar {
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 24px;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+    /* ── Big sector view ── */
+    #big-container { padding: 0 24px 32px; display: none; }
+    #big-toolbar { display: none; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 12px; flex-wrap: wrap; }
 
     .big-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-bottom: 10px;
-      transition: border-color .2s;
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      overflow: hidden; margin-bottom: 10px; transition: border-color .2s;
     }
     .big-card:hover { border-color: rgba(88,166,255,.4); }
-
     .big-header {
-      display: flex;
-      align-items: center;
-      padding: 14px 18px;
-      cursor: pointer;
-      gap: 12px;
-      user-select: none;
+      display: flex; align-items: center; padding: 14px 18px;
+      cursor: pointer; gap: 12px; user-select: none;
     }
     .big-header:hover { background: rgba(255,255,255,.02); }
-
     .bh-icon { font-size: 1.5rem; flex-shrink: 0; }
     .bh-name { font-size: 1rem; font-weight: 700; flex: 1; }
-    .bh-bar-wrap {
-      flex: 0 0 120px;
-      height: 6px;
-      background: var(--border);
-      border-radius: 3px;
-      overflow: hidden;
-    }
+    .bh-bar-wrap { flex: 0 0 120px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
     .bh-bar-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
     .bh-count { font-size: .75rem; color: var(--muted); width: 48px; text-align: center; flex-shrink: 0; }
-    .bh-avg {
-      font-size: 1.15rem;
-      font-weight: 700;
-      width: 72px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .bh-arrow {
-      color: var(--muted);
-      font-size: .75rem;
-      width: 16px;
-      text-align: center;
-      transition: transform .25s;
-      flex-shrink: 0;
-    }
+    .bh-avg { font-size: 1.15rem; font-weight: 700; width: 72px; text-align: right; flex-shrink: 0; }
+    .bh-arrow { color: var(--muted); font-size: .75rem; width: 16px; text-align: center; transition: transform .25s; flex-shrink: 0; }
     .big-card.open .bh-arrow { transform: rotate(90deg); }
 
     .big-subs {
-      display: none;
-      border-top: 1px solid var(--border);
-      padding: 10px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 6px;
+      display: none; border-top: 1px solid var(--border); padding: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 6px;
     }
-    .big-card:not(.open) .big-subs { display: none; }
     .big-card.open .big-subs { display: grid; }
 
     .sub-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 6px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      transition: border-color .15s;
+      display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+      border-radius: 6px; background: var(--bg); border: 1px solid var(--border); transition: border-color .15s;
     }
     .sub-row:hover { border-color: var(--accent); }
     .sub-name { flex: 1; font-size: .82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -332,58 +164,64 @@
     .sub-bar-fill { height: 100%; border-radius: 3px; }
     .sub-pct { width: 54px; text-align: right; font-size: .82rem; font-weight: 700; flex-shrink: 0; }
 
-    .big-empty {
-      padding: 12px;
-      text-align: center;
-      font-size: .8rem;
-      color: var(--muted);
+    /* ── Loading / Error ── */
+    #loading {
+      text-align: center; padding: 60px 24px; color: var(--muted); font-size: .9rem;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+    }
+    .spinner {
+      width: 32px; height: 32px; border: 3px solid var(--border);
+      border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    #error-msg {
+      display: none; padding: 20px 24px;
+      background: rgba(240,74,74,.08); border: 1px solid rgba(240,74,74,.3);
+      border-radius: 8px; margin: 0 24px; color: var(--up); font-size: .88rem;
     }
 
     footer {
-      text-align: center;
-      padding: 20px;
-      font-size: .75rem;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
+      text-align: center; padding: 20px; font-size: .75rem;
+      color: var(--muted); border-top: 1px solid var(--border);
     }
   </style>
 </head>
 <body>
 
-<!-- Header -->
 <header>
   <h1>📊 A股 <span>板块涨跌榜</span></h1>
   <div class="meta">
     <span><span class="status-dot" id="statusDot"></span><span id="marketStatus">加载中…</span></span>
+    <span id="dataBadge" class="data-badge" style="display:none"></span>
     <span>更新: <span id="updateTime">—</span></span>
   </div>
 </header>
 
-<!-- Tabs -->
 <div class="tabs">
-  <button class="tab-btn" data-view="big" id="bigTab">🏷️ 大板块汇总</button>
-  <button class="tab-btn active" data-fs="m:90+t:2+f:!50">行业板块</button>
-  <button class="tab-btn" data-fs="m:90+t:3+f:!50">概念板块</button>
-  <button class="tab-btn" data-fs="m:90+t:1+f:!50">地域板块</button>
+  <button class="tab-btn active" data-view="big">🏷️ 大板块汇总</button>
+  <button class="tab-btn" data-fs="industry">行业板块</button>
+  <button class="tab-btn" data-fs="concept">概念板块</button>
+  <button class="tab-btn" data-fs="geo">地域板块</button>
 </div>
 
-<!-- Big Toolbar -->
+<!-- Big toolbar -->
 <div id="big-toolbar">
   <div class="sort-btns">
-    <button class="sort-btn active" id="bigSortPct" data-bigsort="pct">按涨跌幅</button>
-    <button class="sort-btn" id="bigSortName" data-bigsort="name">按名称</button>
+    <button class="sort-btn active" data-bigsort="pct">按涨跌幅</button>
+    <button class="sort-btn" data-bigsort="name">按名称</button>
     <button class="sort-btn" id="bigExpandAll">全部展开</button>
   </div>
-  <button class="refresh-btn" id="bigRefreshBtn">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-      <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.28"/>
-    </svg>
-    刷新
-  </button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="sort-btn" id="liveToggle" title="切换到实时数据">📡 实时刷新</button>
+    <button class="refresh-btn" id="bigRefreshBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.28"/>
+      </svg>刷新
+    </button>
+  </div>
 </div>
 
-<!-- Toolbar (normal view) -->
-<div class="toolbar" id="normalToolbar">
+<!-- Normal toolbar -->
+<div class="toolbar" id="normalToolbar" style="display:none">
   <div class="sort-btns">
     <button class="sort-btn active" data-sort="pct">按涨跌幅</button>
     <button class="sort-btn" data-sort="name">按名称</button>
@@ -393,145 +231,56 @@
     <button class="refresh-btn" id="refreshBtn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.28"/>
-      </svg>
-      刷新
+      </svg>刷新
     </button>
   </div>
 </div>
 
-<!-- Summary -->
 <div class="summary" id="summary"></div>
-
-<!-- Error -->
 <div id="error-msg"></div>
-
-<!-- Loading -->
-<div id="loading"><div class="spinner"></div><span>正在获取行情数据…</span></div>
-
-<!-- Normal Board -->
-<div id="board-container"></div>
-
-<!-- Big Sector Board -->
+<div id="loading"><div class="spinner"></div><span>正在加载板块数据…</span></div>
+<div id="board-container" style="display:none"></div>
 <div id="big-container"></div>
 
-<footer>数据来源：东方财富  ·  仅供学习演示，不构成投资建议</footer>
+<footer>数据来源：东方财富（每日 15:35 自动更新）· 仅供学习演示，不构成投资建议</footer>
 
 <script>
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
      大板块分类配置
-     keywords: 命中任一关键词即归入该类
-  ═══════════════════════════════════════════ */
+  ═══════════════════════════════════════ */
   const BIG_SECTORS = [
-    {
-      name: '科技 / TMT',
-      icon: '💻',
-      color: '#58a6ff',
-      keywords: ['半导体','芯片','集成电路','软件','信息技术','计算机','人工智能','AI','算力',
-                 '云计算','大数据','互联网','5G','物联网','通信','消费电子','电子','游戏',
-                 '传媒','光模块','PCB','存储','数字媒体','数据中心','服务器','智能硬件',
-                 '工业软件','信创','EDA','ChatGPT','DeepSeek','鸿蒙','元宇宙'],
-    },
-    {
-      name: '大金融',
-      icon: '🏦',
-      color: '#f0a84a',
-      keywords: ['银行','证券','保险','券商','信托','期货','多元金融','非银金融','金融科技'],
-    },
-    {
-      name: '大消费',
-      icon: '🛒',
-      color: '#e879a0',
-      keywords: ['食品饮料','白酒','啤酒','乳品','调味品','家用电器','家电','商贸零售',
-                 '纺织服装','社会服务','美容护理','轻工','餐饮','超市','零售','服装',
-                 '医美','化妆品','护肤','烟草'],
-    },
-    {
-      name: '医药 / 医疗',
-      icon: '💊',
-      color: '#3fb950',
-      keywords: ['医药','医疗','生物','CXO','中药','药','医院','疫苗','基因','血液制品',
-                 '体外诊断','IVD','医疗器械','医疗服务','生命科学','眼科','齿科','康复'],
-    },
-    {
-      name: '新能源',
-      icon: '⚡',
-      color: '#ffd700',
-      keywords: ['光伏','风电','储能','新能源汽车','锂电','氢能','充电桩','电力设备',
-                 '电池','BIPV','钙钛矿','异质结','碳中和','绿电','核电'],
-    },
-    {
-      name: '能源资源',
-      icon: '⛏️',
-      color: '#d29922',
-      keywords: ['煤炭','石油','天然气','有色金属','钢铁','黄金','铜','铝','稀土','化工',
-                 '基础化工','磷化工','氟化工','锂矿','镍','钴','锰','钨','钼','铁矿'],
-    },
-    {
-      name: '军工 / 国防',
-      icon: '✈️',
-      color: '#8b949e',
-      keywords: ['军工','国防','航天','航空发动机','船舶','兵器','核电','卫星','雷达',
-                 '无人机','导弹','军用','战斗机','歼'],
-    },
-    {
-      name: '地产链',
-      icon: '🏠',
-      color: '#a371f7',
-      keywords: ['房地产','建筑','建材','装修','家居','水泥','玻璃','瓷砖','涂料','防水'],
-    },
-    {
-      name: '出行 / 旅游',
-      icon: '✈️',
-      color: '#79c0ff',
-      keywords: ['航空','机场','酒店','旅游','免税','交通运输','铁路','公路','港口',
-                 '物流','快递','航运','景区','出境游'],
-    },
-    {
-      name: '汽车',
-      icon: '🚗',
-      color: '#56d364',
-      keywords: ['汽车','整车','零部件','智能驾驶','自动驾驶','车联网','车载','轮胎'],
-    },
-    {
-      name: '机器人',
-      icon: '🦾',
-      color: '#ff9500',
-      keywords: ['机器人','人形机器人','工业机器人','减速器','丝杠','执行器','协作机器人'],
-    },
-    {
-      name: '低空经济',
-      icon: '🚁',
-      color: '#30bfbf',
-      keywords: ['低空经济','eVTOL','飞行汽车','无人机','通用航空','空中出行'],
-    },
-    {
-      name: '农业',
-      icon: '🌾',
-      color: '#7ee787',
-      keywords: ['农林牧渔','农业','种业','化肥','农药','种猪','生猪','水产','种植'],
-    },
-    {
-      name: '公用事业',
-      icon: '🔌',
-      color: '#40a6ff',
-      keywords: ['公用事业','电力','水务','燃气','垃圾','环保','污水','固废','危废'],
-    },
+    { name: '科技 / TMT', icon: '💻', keywords: ['半导体','芯片','集成电路','软件','信息技术','计算机','人工智能','AI','算力','云计算','大数据','互联网','5G','物联网','通信','消费电子','电子','游戏','传媒','光模块','PCB','存储','数字媒体','数据中心','服务器','智能硬件','工业软件','信创','EDA','ChatGPT','DeepSeek','鸿蒙','元宇宙'] },
+    { name: '大金融', icon: '🏦', keywords: ['银行','证券','保险','券商','信托','期货','多元金融','非银金融','金融科技'] },
+    { name: '大消费', icon: '🛒', keywords: ['食品饮料','白酒','啤酒','乳品','调味品','家用电器','家电','商贸零售','纺织服装','社会服务','美容护理','轻工','餐饮','超市','零售','服装','化妆品','护肤','烟草'] },
+    { name: '医药 / 医疗', icon: '💊', keywords: ['医药','医疗','生物','CXO','中药','医院','疫苗','基因','血液制品','体外诊断','IVD','医疗器械','医疗服务','生命科学','眼科','齿科','康复','医美'] },
+    { name: '新能源', icon: '⚡', keywords: ['光伏','风电','储能','新能源汽车','锂电','氢能','充电桩','电力设备','电池','BIPV','钙钛矿','碳中和','绿电','核电'] },
+    { name: '能源资源', icon: '⛏️', keywords: ['煤炭','石油','天然气','有色金属','钢铁','黄金','铜','铝','稀土','化工','基础化工','磷化工','氟化工','锂矿','镍','钴','锰','钨','铁矿'] },
+    { name: '军工 / 国防', icon: '🛡️', keywords: ['军工','国防','航天','航空发动机','船舶','兵器','卫星','雷达','无人机','导弹','军用'] },
+    { name: '地产链', icon: '🏠', keywords: ['房地产','建筑','建材','装修','家居','水泥','玻璃','瓷砖','涂料','防水'] },
+    { name: '出行 / 旅游', icon: '✈️', keywords: ['机场','酒店','旅游','免税','交通运输','铁路','公路','港口','物流','快递','航运','景区','出境游'] },
+    { name: '汽车', icon: '🚗', keywords: ['汽车','整车','零部件','智能驾驶','自动驾驶','车联网','车载','轮胎'] },
+    { name: '机器人', icon: '🦾', keywords: ['机器人','人形机器人','工业机器人','减速器','丝杠','执行器','协作机器人'] },
+    { name: '低空经济', icon: '🚁', keywords: ['低空经济','eVTOL','飞行汽车','通用航空','空中出行'] },
+    { name: '农业', icon: '🌾', keywords: ['农林牧渔','农业','种业','化肥','农药','种猪','生猪','水产'] },
+    { name: '公用事业', icon: '🔌', keywords: ['公用事业','电力','水务','燃气','垃圾','环保','污水','固废'] },
   ];
 
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
      State
-  ═══════════════════════════════════════════ */
-  let allData = [];
-  let bigData = [];          // cache for big view
-  let currentFs = 'm:90+t:2+f:!50';
-  let sortMode = 'pct';
-  let bigSortMode = 'pct';
-  let heatmapMode = false;
-  let viewMode = 'normal';   // 'normal' | 'big'
-  let allExpanded = false;
+  ═══════════════════════════════════════ */
+  let cachedJson   = null;   // loaded from data/sectors.json
+  let allData      = [];     // current normal board data
+  let bigMerged    = [];     // merged industry+concept for big view
+  let currentFsKey = 'industry';
+  let sortMode     = 'pct';
+  let bigSortMode  = 'pct';
+  let heatmapMode  = false;
+  let viewMode     = 'big';
+  let allExpanded  = false;
+  let useLive      = false;
   let refreshTimer = null;
 
-  /* ── DOM refs ──────────────────────────────── */
+  /* ── DOM ── */
   const boardEl       = document.getElementById('board-container');
   const bigEl         = document.getElementById('big-container');
   const loadingEl     = document.getElementById('loading');
@@ -540,15 +289,15 @@
   const updateEl      = document.getElementById('updateTime');
   const statusEl      = document.getElementById('marketStatus');
   const dotEl         = document.getElementById('statusDot');
+  const dataBadge     = document.getElementById('dataBadge');
   const normalToolbar = document.getElementById('normalToolbar');
   const bigToolbar    = document.getElementById('big-toolbar');
 
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
      Market status
-  ═══════════════════════════════════════════ */
+  ═══════════════════════════════════════ */
   function getMarketStatus() {
-    const now = new Date();
-    const bj = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
+    const bj = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
     const h = bj.getHours(), m = bj.getMinutes(), day = bj.getDay();
     const mins = h * 60 + m;
     if (day === 0 || day === 6) return 'weekend';
@@ -564,342 +313,361 @@
     dotEl.className = 'status-dot' + (s === 'open' || s === 'pre' ? ' live' : '');
   }
 
-  /* ═══════════════════════════════════════════
-     Fetch
-  ═══════════════════════════════════════════ */
-  function fetchSectors(fs) {
-    const fields = 'f2,f3,f4,f8,f12,f14,f15,f16,f17,f18,f20,f21,f62';
-    const url = `https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=200&po=1&np=1&fltt=2&invt=2&fid=f3&fs=${encodeURIComponent(fs)}&fields=${fields}&cb=?`;
-    return new Promise((resolve, reject) => {
-      const cbName = '_em_' + Date.now();
-      const script = document.createElement('script');
-      const timer = setTimeout(() => { cleanup(); reject(new Error('请求超时')); }, 10000);
-      function cleanup() { clearTimeout(timer); delete window[cbName]; script.remove(); }
-      window[cbName] = (data) => { cleanup(); resolve(data); };
-      script.src = url.replace('cb=?', 'cb=' + cbName);
-      script.onerror = () => { cleanup(); reject(new Error('网络错误')); };
-      document.head.appendChild(script);
-    });
-  }
-
-  function parseData(raw) {
-    const list = raw?.data?.diff || [];
-    return list.map(item => ({
-      code: item.f12, name: item.f14,
-      price: item.f2, pct: item.f3,
-      chg: item.f4,   vol: item.f20, flow: item.f62,
-    })).filter(d => d.name && d.pct !== undefined);
-  }
-
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
      Helpers
-  ═══════════════════════════════════════════ */
+  ═══════════════════════════════════════ */
   function fmt(v) {
     if (v == null || v === '-') return '—';
     const n = parseFloat(v);
     if (isNaN(n)) return '—';
     return (n > 0 ? '+' : '') + n.toFixed(2) + '%';
   }
-  function cls(v) {
-    if (v > 0) return 'up'; if (v < 0) return 'down'; return 'flat';
-  }
-  function clr(v) {
-    if (v > 0) return 'var(--up)'; if (v < 0) return 'var(--down)'; return 'var(--flat)';
+  function cls(v) { return v > 0 ? 'up' : v < 0 ? 'down' : 'flat'; }
+  function clr(v) { return v > 0 ? 'var(--up)' : v < 0 ? 'var(--down)' : 'var(--flat)'; }
+
+  /* ═══════════════════════════════════════
+     Load cached JSON from repo
+  ═══════════════════════════════════════ */
+  async function loadCachedJson() {
+    try {
+      const r = await fetch('./data/sectors.json?t=' + Date.now());
+      if (!r.ok) throw new Error('no file');
+      const d = await r.json();
+      if (!d.updated) throw new Error('invalid');
+      return d;
+    } catch { return null; }
   }
 
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
+     Live JSONP fetch from EastMoney
+  ═══════════════════════════════════════ */
+  const FS_MAP = {
+    industry: 'm:90+t:2+f:!50',
+    concept:  'm:90+t:3+f:!50',
+    geo:      'm:90+t:1+f:!50',
+  };
+  function fetchLive(fsKey) {
+    const fs = FS_MAP[fsKey];
+    const fields = 'f2,f3,f4,f8,f12,f14,f20,f62';
+    const url = `https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=200&po=1&np=1&fltt=2&invt=2&fid=f3&fs=${encodeURIComponent(fs)}&fields=${fields}&cb=?`;
+    return new Promise((resolve, reject) => {
+      const cb = '_em_' + Date.now();
+      const s  = document.createElement('script');
+      const t  = setTimeout(() => { cleanup(); reject(new Error('超时')); }, 10000);
+      function cleanup() { clearTimeout(t); delete window[cb]; s.remove(); }
+      window[cb] = d => { cleanup(); resolve(d); };
+      s.src = url.replace('cb=?', 'cb=' + cb);
+      s.onerror = () => { cleanup(); reject(new Error('网络错误')); };
+      document.head.appendChild(s);
+    });
+  }
+  function parseLive(raw) {
+    return (raw?.data?.diff || []).map(item => ({
+      code: item.f12, name: item.f14,
+      price: item.f2, pct: item.f3, chg: item.f4, vol: item.f20, flow: item.f62,
+    })).filter(d => d.name && d.pct != null && d.pct !== '-')
+       .map(d => ({ ...d, pct: parseFloat(d.pct) || 0 }));
+  }
+
+  /* ═══════════════════════════════════════
      Big sector grouping
-  ═══════════════════════════════════════════ */
+  ═══════════════════════════════════════ */
   function matchBig(name) {
     for (const big of BIG_SECTORS) {
-      for (const kw of big.keywords) {
-        if (name.includes(kw)) return big.name;
-      }
+      for (const kw of big.keywords) if (name.includes(kw)) return big.name;
     }
     return '其他';
   }
-
   function groupIntoBig(data) {
     const map = {};
-    // init
-    for (const b of BIG_SECTORS) {
-      map[b.name] = { ...b, subs: [], pctSum: 0, avgPct: 0 };
-    }
-    map['其他'] = { name: '其他', icon: '📦', color: '#6e7681', subs: [], pctSum: 0, avgPct: 0 };
-
+    for (const b of BIG_SECTORS) map[b.name] = { ...b, subs: [], pctSum: 0 };
+    map['其他'] = { name: '其他', icon: '📦', subs: [], pctSum: 0 };
     for (const d of data) {
-      const key = matchBig(d.name);
-      if (!map[key]) map[key] = { name: key, icon: '📦', color: '#6e7681', subs: [], pctSum: 0, avgPct: 0 };
-      map[key].subs.push(d);
-      map[key].pctSum += (parseFloat(d.pct) || 0);
+      const k = matchBig(d.name);
+      if (!map[k]) map[k] = { name: k, icon: '📦', subs: [], pctSum: 0 };
+      map[k].subs.push(d);
+      map[k].pctSum += (d.pct || 0);
     }
-
-    // calc avg, remove empties (except 其他)
     const result = Object.values(map).filter(g => g.subs.length > 0);
     for (const g of result) {
       g.avgPct = g.pctSum / g.subs.length;
-      // sort subs by pct desc
-      g.subs.sort((a, b) => (parseFloat(b.pct) || 0) - (parseFloat(a.pct) || 0));
+      g.subs.sort((a, b) => b.pct - a.pct);
     }
     return result;
   }
 
-  /* ═══════════════════════════════════════════
-     Summary bar
-  ═══════════════════════════════════════════ */
+  /* ═══════════════════════════════════════
+     Render: summary row
+  ═══════════════════════════════════════ */
   function renderSummary(data) {
-    const ups = data.filter(d => d.pct > 0).length;
+    const ups  = data.filter(d => d.pct > 0).length;
     const downs = data.filter(d => d.pct < 0).length;
-    const avg = data.reduce((s, d) => s + (parseFloat(d.pct) || 0), 0) / (data.length || 1);
-    const max = data.reduce((a, b) => ((a.pct??-99) > (b.pct??-99) ? a : b), data[0] || {});
-    const min = data.reduce((a, b) => ((a.pct??99) < (b.pct??99) ? a : b), data[0] || {});
+    const avg  = data.reduce((s, d) => s + (d.pct || 0), 0) / (data.length || 1);
+    const max  = data.reduce((a, b) => (a.pct ?? -99) > (b.pct ?? -99) ? a : b, data[0] || {});
+    const min  = data.reduce((a, b) => (a.pct ?? 99)  < (b.pct ?? 99)  ? a : b, data[0] || {});
     summaryEl.innerHTML = `
       <div class="s-card"><div class="s-label">板块数</div><div class="s-val" style="color:var(--text)">${data.length}</div></div>
       <div class="s-card"><div class="s-label">上涨</div><div class="s-val up">${ups}</div></div>
       <div class="s-card"><div class="s-label">下跌</div><div class="s-val down">${downs}</div></div>
       <div class="s-card"><div class="s-label">平均涨跌</div><div class="s-val ${cls(avg)}">${fmt(avg)}</div></div>
-      <div class="s-card"><div class="s-label">领涨</div><div class="s-val up" title="${max.name||''}">${max.name?max.name.slice(0,5):'—'} ${fmt(max.pct)}</div></div>
-      <div class="s-card"><div class="s-label">领跌</div><div class="s-val down" title="${min.name||''}">${min.name?min.name.slice(0,5):'—'} ${fmt(min.pct)}</div></div>`;
+      <div class="s-card"><div class="s-label">领涨</div><div class="s-val up">${(max.name||'').slice(0,5)} ${fmt(max.pct)}</div></div>
+      <div class="s-card"><div class="s-label">领跌</div><div class="s-val down">${(min.name||'').slice(0,5)} ${fmt(min.pct)}</div></div>`;
   }
 
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
      Render: normal board
-  ═══════════════════════════════════════════ */
+  ═══════════════════════════════════════ */
   function renderBoard(data) {
     let sorted = [...data];
-    if (sortMode === 'pct') sorted.sort((a, b) => ((b.pct??-99)-(a.pct??-99)));
-    else sorted.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+    if (sortMode === 'pct') sorted.sort((a,b) => b.pct - a.pct);
+    else sorted.sort((a,b) => a.name.localeCompare(b.name, 'zh'));
     const maxAbs = Math.max(...sorted.map(d => Math.abs(d.pct||0)), 1);
 
     if (heatmapMode) {
       boardEl.innerHTML = sorted.map(d => {
-        const intensity = Math.min(Math.abs(d.pct||0)/5,1);
-        const bg = d.pct>0 ? `rgba(240,74,74,${0.15+intensity*.6})`
-                 : d.pct<0 ? `rgba(14,203,129,${0.15+intensity*.6})` : 'var(--card)';
-        const size = 80 + Math.min(Math.abs(d.pct||0)*8, 60);
-        return `<div class="sector-row" style="width:${size}px;background:${bg};border-color:transparent">
+        const intens = Math.min(Math.abs(d.pct||0)/5, 1);
+        const bg = d.pct > 0 ? `rgba(240,74,74,${0.15+intens*.6})`
+                 : d.pct < 0 ? `rgba(14,203,129,${0.15+intens*.6})` : 'var(--card)';
+        const sz = 80 + Math.min(Math.abs(d.pct||0)*8, 60);
+        return `<div class="sector-row" style="width:${sz}px;background:${bg};border-color:transparent">
                   <div class="s-name">${d.name}</div>
                   <div class="s-pct ${cls(d.pct)}">${fmt(d.pct)}</div></div>`;
       }).join('');
     } else {
       boardEl.innerHTML = sorted.map((d,i) => {
-        const barW = Math.round(Math.abs(d.pct||0)/maxAbs*100);
+        const bw = Math.round(Math.abs(d.pct||0)/maxAbs*100);
         return `<div class="sector-row">
                   <div class="s-rank">${i+1}</div>
                   <div class="s-name" title="${d.name}">${d.name}</div>
-                  <div class="bar-wrap"><div class="bar-fill ${cls(d.pct)}" style="width:${barW}%"></div></div>
+                  <div class="bar-wrap"><div class="bar-fill ${cls(d.pct)}" style="width:${bw}%"></div></div>
                   <div class="s-pct ${cls(d.pct)}">${fmt(d.pct)}</div></div>`;
       }).join('');
     }
   }
 
-  /* ═══════════════════════════════════════════
+  /* ═══════════════════════════════════════
      Render: big sector board
-  ═══════════════════════════════════════════ */
+  ═══════════════════════════════════════ */
   function renderBigBoard(groups) {
     let sorted = [...groups];
     if (bigSortMode === 'pct') sorted.sort((a,b) => b.avgPct - a.avgPct);
     else sorted.sort((a,b) => a.name.localeCompare(b.name,'zh'));
-
-    const maxAbsAvg = Math.max(...sorted.map(g => Math.abs(g.avgPct)), 1);
+    const maxAbs = Math.max(...sorted.map(g => Math.abs(g.avgPct)), 1);
 
     bigEl.innerHTML = sorted.map(g => {
-      const avgPct = g.avgPct;
-      const barW = Math.round(Math.abs(avgPct) / maxAbsAvg * 100);
-      const c = cls(avgPct);
-
-      // sub-sectors
-      const maxAbsSub = Math.max(...g.subs.map(s => Math.abs(s.pct||0)), 1);
+      const bw = Math.round(Math.abs(g.avgPct)/maxAbs*100);
+      const c  = cls(g.avgPct);
+      const mSub = Math.max(...g.subs.map(s => Math.abs(s.pct||0)), 1);
       const subsHtml = g.subs.map(s => {
-        const sw = Math.round(Math.abs(s.pct||0)/maxAbsSub*100);
+        const sw = Math.round(Math.abs(s.pct||0)/mSub*100);
         return `<div class="sub-row">
                   <div class="sub-name" title="${s.name}">${s.name}</div>
-                  <div class="sub-bar-wrap"><div class="sub-bar-fill ${cls(s.pct)}" style="width:${sw}%;background:${clr(s.pct)}"></div></div>
-                  <div class="sub-pct ${cls(s.pct)}">${fmt(s.pct)}</div>
-                </div>`;
+                  <div class="sub-bar-wrap"><div class="sub-bar-fill" style="width:${sw}%;background:${clr(s.pct)}"></div></div>
+                  <div class="sub-pct ${cls(s.pct)}">${fmt(s.pct)}</div></div>`;
       }).join('');
-
-      const isOpen = allExpanded ? 'open' : '';
+      const openCls = allExpanded ? 'open' : '';
       return `
-        <div class="big-card ${isOpen}" data-name="${g.name}">
-          <div class="big-header" onclick="toggleBig(this.parentElement)">
+        <div class="big-card ${openCls}">
+          <div class="big-header" onclick="this.parentElement.classList.toggle('open')">
             <div class="bh-icon">${g.icon}</div>
             <div class="bh-name">${g.name}</div>
-            <div class="bh-bar-wrap">
-              <div class="bh-bar-fill" style="width:${barW}%;background:${clr(avgPct)}"></div>
-            </div>
+            <div class="bh-bar-wrap"><div class="bh-bar-fill" style="width:${bw}%;background:${clr(g.avgPct)}"></div></div>
             <div class="bh-count">${g.subs.length} 个</div>
-            <div class="bh-avg ${c}">${fmt(avgPct)}</div>
+            <div class="bh-avg ${c}">${fmt(g.avgPct)}</div>
             <div class="bh-arrow">▶</div>
           </div>
-          <div class="big-subs">${subsHtml || '<div class="big-empty">暂无数据</div>'}</div>
+          <div class="big-subs">${subsHtml}</div>
         </div>`;
     }).join('');
   }
 
-  function toggleBig(card) {
-    card.classList.toggle('open');
-  }
-
-  /* ═══════════════════════════════════════════
-     Load: normal tabs
-  ═══════════════════════════════════════════ */
-  async function load(fs) {
-    loadingEl.style.display = 'flex';
-    boardEl.innerHTML = '';
-    summaryEl.innerHTML = '';
-    errorEl.style.display = 'none';
-    document.getElementById('refreshBtn').classList.add('spinning');
-
-    try {
-      const raw = await fetchSectors(fs);
-      allData = parseData(raw);
-      if (allData.length === 0) throw new Error('未获取到数据，可能非交易时段或 API 限流');
-      renderSummary(allData);
-      renderBoard(allData);
-      updateEl.textContent = new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    } catch(e) {
-      errorEl.textContent = '⚠️ ' + e.message + '（东方财富 API 限制跨域或非交易时段数据为空）';
-      errorEl.style.display = 'block';
-      loadDemoData(false);
-    } finally {
-      loadingEl.style.display = 'none';
-      document.getElementById('refreshBtn').classList.remove('spinning');
-      updateStatusBadge();
-    }
-  }
-
-  /* ═══════════════════════════════════════════
-     Load: big sectors (fetch both industry + concept)
-  ═══════════════════════════════════════════ */
-  async function loadBig() {
-    loadingEl.style.display = 'flex';
-    bigEl.innerHTML = '';
-    summaryEl.innerHTML = '';
-    errorEl.style.display = 'none';
-    document.getElementById('bigRefreshBtn').classList.add('spinning');
-
-    try {
-      // fetch industry + concept simultaneously
-      const [rawInd, rawCon] = await Promise.all([
-        fetchSectors('m:90+t:2+f:!50'),
-        fetchSectors('m:90+t:3+f:!50'),
-      ]);
-      const ind = parseData(rawInd);
-      const con = parseData(rawCon);
-      // merge, deduplicate by name
-      const nameSet = new Set(ind.map(d => d.name));
-      const merged = [...ind, ...con.filter(d => !nameSet.has(d.name))];
-
-      if (merged.length === 0) throw new Error('未获取到数据');
-
-      bigData = merged;
-      renderSummary(merged);
-      const groups = groupIntoBig(merged);
-      renderBigBoard(groups);
-      updateEl.textContent = new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    } catch(e) {
-      errorEl.textContent = '⚠️ ' + e.message;
-      errorEl.style.display = 'block';
-      loadDemoData(true);
-    } finally {
-      loadingEl.style.display = 'none';
-      document.getElementById('bigRefreshBtn').classList.remove('spinning');
-      updateStatusBadge();
-    }
-  }
-
-  /* ═══════════════════════════════════════════
-     Demo fallback
-  ═══════════════════════════════════════════ */
-  function loadDemoData(isBig) {
-    const names = [
-      '半导体','软件开发','人工智能','消费电子','通信设备','云计算','大数据',
-      '银行','证券','保险',
-      '食品饮料','白酒','家用电器','商贸零售',
-      '医药生物','医疗器械','医疗服务',
-      '光伏设备','风电','储能','新能源汽车',
-      '煤炭','有色金属','基础化工','钢铁',
-      '军工','国防',
-      '房地产','建筑材料',
-      '航空','酒店旅游','免税',
-      '汽车','汽车零部件',
-      '机器人','人形机器人',
-      '农林牧渔',
-      '公用事业','环保',
-    ];
-    const demo = names.map(name => ({
-      name, pct: parseFloat((Math.random()*10-4).toFixed(2)),
-    }));
-
-    summaryEl.innerHTML = `<div class="s-card" style="grid-column:1/-1">
-      <div class="s-label" style="color:var(--up)">⚠️ 演示数据（部署后实盘数据正常）</div></div>`;
-    renderSummary(demo);
-
-    if (isBig) {
-      const groups = groupIntoBig(demo);
-      renderBigBoard(groups);
-    } else {
-      allData = demo;
-      renderBoard(demo);
-    }
-  }
-
-  /* ═══════════════════════════════════════════
-     Auto refresh
-  ═══════════════════════════════════════════ */
-  function scheduleRefresh() {
-    clearTimeout(refreshTimer);
-    const s = getMarketStatus();
-    if (s === 'open' || s === 'pre') {
-      refreshTimer = setTimeout(() => {
-        if (viewMode === 'big') loadBig(); else load(currentFs);
-        scheduleRefresh();
-      }, 30000);
-    }
-  }
-
-  /* ═══════════════════════════════════════════
-     View switching
-  ═══════════════════════════════════════════ */
-  function showNormalView() {
-    viewMode = 'normal';
-    bigEl.style.display = 'none';
-    bigToolbar.style.display = 'none';
-    boardEl.style.display = '';
-    normalToolbar.style.display = '';
-    summaryEl.style.display = '';
-  }
+  /* ═══════════════════════════════════════
+     Show / hide view panels
+  ═══════════════════════════════════════ */
   function showBigView() {
     viewMode = 'big';
     boardEl.style.display = 'none';
     normalToolbar.style.display = 'none';
     bigEl.style.display = 'block';
     bigToolbar.style.display = 'flex';
-    summaryEl.style.display = '';
+  }
+  function showNormalView() {
+    viewMode = 'normal';
+    bigEl.style.display = 'none';
+    bigToolbar.style.display = 'none';
+    boardEl.style.display = '';
+    normalToolbar.style.display = '';
   }
 
-  /* ═══════════════════════════════════════════
+  function setLoading(on) {
+    loadingEl.style.display = on ? 'flex' : 'none';
+  }
+  function setError(msg) {
+    if (msg) { errorEl.textContent = '⚠️ ' + msg; errorEl.style.display = 'block'; }
+    else errorEl.style.display = 'none';
+  }
+  function setUpdateTime(str) {
+    updateEl.textContent = str;
+  }
+  function setBadge(type, text) {
+    dataBadge.textContent = text;
+    dataBadge.className = 'data-badge ' + (type || '');
+    dataBadge.style.display = text ? '' : 'none';
+  }
+
+  /* ═══════════════════════════════════════
+     Load: big view
+  ═══════════════════════════════════════ */
+  async function loadBig(forceRefresh) {
+    setLoading(true); setError('');
+    document.getElementById('bigRefreshBtn').classList.add('spinning');
+    summaryEl.innerHTML = ''; bigEl.innerHTML = '';
+    showBigView();
+
+    try {
+      let ind, con;
+
+      if (!forceRefresh && cachedJson) {
+        // use already-loaded cache
+        ind = cachedJson.industry || [];
+        con = cachedJson.concept  || [];
+        setBadge('cached', `📁 收盘数据 ${cachedJson.updated}`);
+        setUpdateTime(cachedJson.updated);
+      } else if (!forceRefresh) {
+        // try loading cache from file
+        const c = await loadCachedJson();
+        if (c && (c.industry||[]).length > 0) {
+          cachedJson = c;
+          ind = c.industry || [];
+          con = c.concept  || [];
+          setBadge('cached', `📁 收盘数据 ${c.updated}`);
+          setUpdateTime(c.updated);
+        } else {
+          // fallback to live
+          forceRefresh = true;
+        }
+      }
+
+      if (forceRefresh) {
+        // live fetch
+        setLoading(true);
+        const [rInd, rCon] = await Promise.all([fetchLive('industry'), fetchLive('concept')]);
+        ind = parseLive(rInd); con = parseLive(rCon);
+        setBadge('live', '📡 实时数据');
+        setUpdateTime(new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'}));
+      }
+
+      // dedupe
+      const seen = new Set(ind.map(d => d.name));
+      bigMerged = [...ind, ...con.filter(d => !seen.has(d.name))];
+      if (bigMerged.length === 0) throw new Error('获取数据为空');
+
+      renderSummary(bigMerged);
+      renderBigBoard(groupIntoBig(bigMerged));
+    } catch(e) {
+      setError(e.message + '（非交易时段或 API 限流）');
+      renderDemoBig();
+    } finally {
+      setLoading(false);
+      document.getElementById('bigRefreshBtn').classList.remove('spinning');
+      updateStatusBadge();
+    }
+  }
+
+  /* ═══════════════════════════════════════
+     Load: normal tab
+  ═══════════════════════════════════════ */
+  async function loadNormal(fsKey, forceRefresh) {
+    setLoading(true); setError('');
+    document.getElementById('refreshBtn').classList.add('spinning');
+    boardEl.innerHTML = ''; summaryEl.innerHTML = '';
+    showNormalView();
+
+    try {
+      let data;
+      if (!forceRefresh && cachedJson && cachedJson[fsKey]) {
+        data = cachedJson[fsKey];
+        setBadge('cached', `📁 收盘数据 ${cachedJson.updated}`);
+        setUpdateTime(cachedJson.updated);
+      } else if (!forceRefresh) {
+        const c = cachedJson || await loadCachedJson();
+        if (c && (c[fsKey]||[]).length > 0) {
+          cachedJson = c;
+          data = c[fsKey];
+          setBadge('cached', `📁 收盘数据 ${c.updated}`);
+          setUpdateTime(c.updated);
+        } else forceRefresh = true;
+      }
+      if (forceRefresh) {
+        const raw = await fetchLive(fsKey);
+        data = parseLive(raw);
+        setBadge('live', '📡 实时数据');
+        setUpdateTime(new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'}));
+      }
+      if (!data || data.length === 0) throw new Error('数据为空');
+      allData = data;
+      renderSummary(allData);
+      renderBoard(allData);
+    } catch(e) {
+      setError(e.message);
+      renderDemoNormal();
+    } finally {
+      setLoading(false);
+      document.getElementById('refreshBtn').classList.remove('spinning');
+      updateStatusBadge();
+    }
+  }
+
+  /* ═══════════════════════════════════════
+     Demo fallback
+  ═══════════════════════════════════════ */
+  function demoItems() {
+    return ['半导体','软件开发','人工智能','消费电子','通信设备','云计算','大数据',
+      '银行','证券','保险','食品饮料','白酒','家用电器','商贸零售','医药生物',
+      '医疗器械','光伏设备','风电','储能','新能源汽车','煤炭','有色金属',
+      '基础化工','钢铁','军工','国防','房地产','建筑材料','机场','酒店旅游',
+      '汽车','机器人','人形机器人','农林牧渔','公用事业','环保']
+      .map(name => ({ name, pct: parseFloat((Math.random()*10-4).toFixed(2)) }));
+  }
+  function renderDemoBig() {
+    const d = demoItems();
+    summaryEl.innerHTML = '<div class="s-card" style="grid-column:1/-1"><div class="s-label" style="color:var(--up)">⚠️ 演示数据（部署后收盘数据自动更新）</div></div>';
+    renderSummary(d); renderBigBoard(groupIntoBig(d));
+  }
+  function renderDemoNormal() {
+    allData = demoItems().slice(0,20);
+    renderSummary(allData); renderBoard(allData);
+  }
+
+  /* ═══════════════════════════════════════
+     Auto refresh during trading hours
+  ═══════════════════════════════════════ */
+  function scheduleRefresh() {
+    clearTimeout(refreshTimer);
+    if (useLive && (getMarketStatus() === 'open' || getMarketStatus() === 'pre')) {
+      refreshTimer = setTimeout(() => {
+        if (viewMode === 'big') loadBig(true); else loadNormal(currentFsKey, true);
+        scheduleRefresh();
+      }, 60000);
+    }
+  }
+
+  /* ═══════════════════════════════════════
      Events
-  ═══════════════════════════════════════════ */
-  // Tab clicks
+  ═══════════════════════════════════════ */
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
       if (btn.dataset.view === 'big') {
-        showBigView();
-        loadBig();
+        loadBig(false);
       } else {
-        showNormalView();
-        currentFs = btn.dataset.fs;
-        load(currentFs);
+        currentFsKey = btn.dataset.fs;
+        loadNormal(currentFsKey, false);
       }
     });
   });
 
-  // Normal sort
   document.querySelectorAll('.sort-btn[data-sort]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sort-btn[data-sort]').forEach(b => b.classList.remove('active'));
@@ -909,26 +677,29 @@
     });
   });
 
-  // Big sort
   document.querySelectorAll('.sort-btn[data-bigsort]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sort-btn[data-bigsort]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       bigSortMode = btn.dataset.bigsort;
-      if (bigData.length) renderBigBoard(groupIntoBig(bigData));
+      if (bigMerged.length) renderBigBoard(groupIntoBig(bigMerged));
     });
   });
 
-  // Expand all / collapse all
   document.getElementById('bigExpandAll').addEventListener('click', function() {
     allExpanded = !allExpanded;
     this.textContent = allExpanded ? '全部收起' : '全部展开';
-    document.querySelectorAll('.big-card').forEach(card => {
-      card.classList.toggle('open', allExpanded);
-    });
+    document.querySelectorAll('.big-card').forEach(c => c.classList.toggle('open', allExpanded));
   });
 
-  // Heatmap toggle
+  document.getElementById('liveToggle').addEventListener('click', function() {
+    useLive = !useLive;
+    this.textContent = useLive ? '📁 切换收盘数据' : '📡 实时刷新';
+    this.classList.toggle('active', useLive);
+    loadBig(useLive);
+    scheduleRefresh();
+  });
+
   document.getElementById('viewToggle').addEventListener('click', function() {
     heatmapMode = !heatmapMode;
     this.textContent = heatmapMode ? '📋 列表视图' : '🔥 热力图';
@@ -936,20 +707,14 @@
     if (allData.length) renderBoard(allData);
   });
 
-  // Refresh buttons
-  document.getElementById('refreshBtn').addEventListener('click', () => load(currentFs));
-  document.getElementById('bigRefreshBtn').addEventListener('click', () => loadBig());
+  document.getElementById('refreshBtn').addEventListener('click', () => loadNormal(currentFsKey, true));
+  document.getElementById('bigRefreshBtn').addEventListener('click', () => loadBig(useLive));
 
-  /* ═══════════════════════════════════════════
-     Init — default to 大板块 view
-  ═══════════════════════════════════════════ */
+  /* ═══════════════════════════════════════
+     Init
+  ═══════════════════════════════════════ */
   updateStatusBadge();
-  // Activate big tab by default
-  document.querySelector('[data-view="big"]').classList.add('active');
-  document.querySelector('[data-fs="m:90+t:2+f:!50"]').classList.remove('active');
-  showBigView();
-  loadBig();
-  scheduleRefresh();
+  loadBig(false);
 </script>
 </body>
 </html>
