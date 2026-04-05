@@ -28,7 +28,7 @@ def fetch_sectors(fs, retries=3):
     fields = 'f2,f3,f4,f8,f12,f14,f15,f16,f17,f18,f20,f21,f62'
     url = (
         'https://push2.eastmoney.com/api/qt/clist/get'
-        f'?pn=1&pz=200&po=1&np=1&fltt=2&invt=2&fid=f3'
+        f'?pn=1&pz=500&po=1&np=1&fltt=2&invt=2&fid=f3'
         f'&fs={urllib.parse.quote(fs)}&fields={fields}'
     )
     for attempt in range(retries):
