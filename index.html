@@ -265,6 +265,60 @@
       color: var(--muted);
       border-top: 1px solid var(--border);
     }
+
+    /* ── Guide Section ───────────────────────── */
+    .guide-title {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .guide-title span {
+      font-size: .78rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .g-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      transition: border-color .2s, transform .15s;
+      cursor: default;
+    }
+    .g-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .g-card.theme:hover {
+      border-color: #f0a84a;
+    }
+    .g-icon {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+    .g-name {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .g-card.theme .g-name {
+      color: #f0d080;
+    }
+    .g-desc {
+      font-size: .76rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
@@ -283,6 +337,7 @@
   <button class="tab-btn active" data-fs="m:90+t:2+f:!50">行业板块</button>
   <button class="tab-btn" data-fs="m:90+t:3+f:!50">概念板块</button>
   <button class="tab-btn" data-fs="m:90+t:1+f:!50">地域板块</button>
+  <button class="tab-btn" data-view="guide" id="guideTab">📚 分类指南</button>
 </div>
 
 <!-- Toolbar -->
@@ -313,6 +368,54 @@
 
 <!-- Board -->
 <div id="board-container"></div>
+
+<!-- Guide Section -->
+<div id="guide-section" style="display:none;padding:0 24px 32px">
+
+  <div style="margin:20px 0 12px;font-size:.8rem;color:var(--muted)">
+    以下为 A 股市场常见的<strong style="color:var(--text)">高层级板块分类</strong>，帮助理解板块结构与投资逻辑。
+  </div>
+
+  <!-- 行业板块 -->
+  <div class="guide-title">📊 行业板块 <span>（相对稳定，按行业基本面划分）</span></div>
+  <div class="guide-grid" id="industry-grid">
+    <div class="g-card"><div class="g-icon">💻</div><div class="g-name">科技 / TMT</div><div class="g-desc">半导体、软件、AI、通信、消费电子</div></div>
+    <div class="g-card"><div class="g-icon">🏦</div><div class="g-name">大金融</div><div class="g-desc">银行、券商（牛市旗手）、保险</div></div>
+    <div class="g-card"><div class="g-icon">🛒</div><div class="g-name">大消费</div><div class="g-desc">白酒/食品饮料、零售、家电、餐饮</div></div>
+    <div class="g-card"><div class="g-icon">💊</div><div class="g-name">医药 / 医疗</div><div class="g-desc">生物医药、医疗器械、CXO、中药</div></div>
+    <div class="g-card"><div class="g-icon">⚡</div><div class="g-name">新能源</div><div class="g-desc">光伏、风电、储能、新能源车产业链</div></div>
+    <div class="g-card"><div class="g-icon">⛏️</div><div class="g-name">能源资源</div><div class="g-desc">煤炭、石油、天然气、有色金属</div></div>
+    <div class="g-card"><div class="g-icon">✈️</div><div class="g-name">军工 / 国防</div><div class="g-desc">航空装备、导弹、军用电子、船舶</div></div>
+    <div class="g-card"><div class="g-icon">🏠</div><div class="g-name">地产链</div><div class="g-desc">房地产开发、建材、建筑、家居装修</div></div>
+    <div class="g-card"><div class="g-icon">🔌</div><div class="g-name">公用事业</div><div class="g-desc">电力、水务、燃气、垃圾发电</div></div>
+    <div class="g-card"><div class="g-icon">🌾</div><div class="g-name">农业</div><div class="g-desc">农林牧渔、种业、化肥、农药</div></div>
+    <div class="g-card"><div class="g-icon">🚗</div><div class="g-name">汽车</div><div class="g-desc">整车、零部件、智能驾驶、车联网</div></div>
+    <div class="g-card"><div class="g-icon">🏭</div><div class="g-name">工业机械</div><div class="g-desc">工程机械、机床、自动化、仪器仪表</div></div>
+  </div>
+
+  <!-- 主题板块 -->
+  <div class="guide-title" style="margin-top:28px">🔥 主题 / 概念板块 <span>（热点轮动，跟随政策与事件）</span></div>
+  <div class="guide-grid">
+    <div class="g-card theme"><div class="g-icon">🤖</div><div class="g-name">人工智能 / AI</div><div class="g-desc">算力、大模型、AI 应用、Agent</div></div>
+    <div class="g-card theme"><div class="g-icon">🦾</div><div class="g-name">机器人</div><div class="g-desc">人形机器人、工业机器人、减速器</div></div>
+    <div class="g-card theme"><div class="g-icon">🚁</div><div class="g-name">低空经济</div><div class="g-desc">无人机、eVTOL、航空物流、飞行汽车</div></div>
+    <div class="g-card theme"><div class="g-icon">💰</div><div class="g-name">红利 / 高股息</div><div class="g-desc">稳定分红、防御属性，适合长期持有</div></div>
+    <div class="g-card theme"><div class="g-icon">🌍</div><div class="g-name">出行 / 旅游</div><div class="g-desc">航空、酒店、景区、免税、OTA 平台</div></div>
+    <div class="g-card theme"><div class="g-icon">🔧</div><div class="g-name">国产替代</div><div class="g-desc">芯片自主、工业软件、信创、关键材料</div></div>
+    <div class="g-card theme"><div class="g-icon">🏛️</div><div class="g-name">央企 / 中特估</div><div class="g-desc">央国企重估，政策驱动估值修复</div></div>
+    <div class="g-card theme"><div class="g-icon">🌐</div><div class="g-name">数字经济</div><div class="g-desc">大数据、云计算、数据要素、工业互联网</div></div>
+    <div class="g-card theme"><div class="g-icon">📱</div><div class="g-name">华为概念</div><div class="g-desc">鸿蒙生态、麒麟芯片、华为供应链</div></div>
+    <div class="g-card theme"><div class="g-icon">💄</div><div class="g-name">医美</div><div class="g-desc">玻尿酸、医美耗材、轻医美、颜值经济</div></div>
+    <div class="g-card theme"><div class="g-icon">🔬</div><div class="g-name">半导体 / 芯片</div><div class="g-desc">晶圆代工、封测、EDA、材料设备</div></div>
+    <div class="g-card theme"><div class="g-icon">🔋</div><div class="g-name">储能</div><div class="g-desc">电化学储能、飞轮、压缩空气、液流电池</div></div>
+  </div>
+
+  <!-- 逻辑说明 -->
+  <div style="margin-top:24px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:.82rem;line-height:1.8;color:var(--muted)">
+    💡 <strong style="color:var(--text)">投资逻辑</strong>：行业板块看<strong style="color:var(--accent)">周期和基本面</strong>，主题板块跟<strong style="color:#f0a84a)">政策和热点</strong>走。
+    实操中常将两者结合：先定行业大方向（如科技），再找当下热点主题（如 AI 算力）锁定细分机会。
+  </div>
+</div>
 
 <footer>数据来源：东方财富  ·  仅供学习演示，不构成投资建议</footer>
 
@@ -535,12 +638,35 @@
   }
 
   /* ── Events ────────────────────────────────── */
+  /* ── Tab events ────────────────────────────── */
+  const guideSection = document.getElementById('guide-section');
+  const toolbar = document.querySelector('.toolbar');
+  const summary = document.getElementById('summary');
+  const boardContainer = document.getElementById('board-container');
+  const loadingDiv = document.getElementById('loading');
+
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      currentFs = btn.dataset.fs;
-      load(currentFs);
+
+      if (btn.dataset.view === 'guide') {
+        // Show guide, hide market board
+        guideSection.style.display = 'block';
+        toolbar.style.display = 'none';
+        summary.style.display = 'none';
+        boardContainer.style.display = 'none';
+        loadingDiv.style.display = 'none';
+        errorEl.style.display = 'none';
+      } else {
+        // Show market board, hide guide
+        guideSection.style.display = 'none';
+        toolbar.style.display = '';
+        summary.style.display = '';
+        boardContainer.style.display = '';
+        currentFs = btn.dataset.fs;
+        load(currentFs);
+      }
     });
   });
 
