@@ -25,23 +25,43 @@ HEADERS = {
 
 
 def fetch_sectors(fs, retries=3):
+    """分页抓取所有板块数据（每页100条，最多10页）"""
     fields = 'f2,f3,f4,f8,f12,f14,f15,f16,f17,f18,f20,f21,f62'
-    url = (
-        'https://push2.eastmoney.com/api/qt/clist/get'
-        f'?pn=1&pz=500&po=1&np=1&fltt=2&invt=2&fid=f3'
-        f'&fs={urllib.parse.quote(fs)}&fields={fields}'
-    )
-    for attempt in range(retries):
-        try:
-            req = urllib.request.Request(url, headers=HEADERS)
-            with urllib.request.urlopen(req, timeout=20) as resp:
-                data = json.loads(resp.read().decode('utf-8'))
-                return data
-        except Exception as e:
-            print(f'  [重试 {attempt+1}/{retries}] {e}')
-            if attempt < retries - 1:
-                time.sleep(3 * (attempt + 1))
-    return None
+    all_items = []
+
+    for pn in range(1, 11):  # 最多10页，约1000条
+        url = (
+            'https://push2.eastmoney.com/api/qt/clist/get'
+            f'?pn={pn}&pz=100&po=1&np=1&fltt=2&invt=2&fid=f3'
+            f'&fs={urllib.parse.quote(fs)}&fields={fields}'
+        )
+        success = False
+        for attempt in range(retries):
+            try:
+                req = urllib.request.Request(url, headers=HEADERS)
+                with urllib.request.urlopen(req, timeout=20) as resp:
+                    data = json.loads(resp.read().decode('utf-8'))
+                items = (data or {}).get('data', {})
+                if not items:
+                    return {'data': {'diff': all_items}}
+                items = items.get('diff') or []
+                if not items:
+                    return {'data': {'diff': all_items}}
+                all_items.extend(items)
+                success = True
+                break
+            except Exception as e:
+                print(f'  [第{pn}页 重试 {attempt+1}/{retries}] {e}')
+                if attempt < retries - 1:
+                    time.sleep(2)
+
+        if not success:
+            print(f'  第{pn}页失败，停止翻页')
+            break
+
+        time.sleep(0.3)  # 避免请求过快
+
+    return {'data': {'diff': all_items}}
 
 
 def parse_data(raw):

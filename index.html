@@ -412,12 +412,11 @@
     concept:  'm:90+t:3+f:!50',
     geo:      'm:90+t:1+f:!50',
   };
-  function fetchLive(fsKey) {
-    const fs = FS_MAP[fsKey];
+  function fetchOnePage(fs, pn) {
     const fields = 'f2,f3,f4,f8,f12,f14,f20,f62';
-    const url = `https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=500&po=1&np=1&fltt=2&invt=2&fid=f3&fs=${encodeURIComponent(fs)}&fields=${fields}&cb=?`;
+    const url = `https://push2.eastmoney.com/api/qt/clist/get?pn=${pn}&pz=100&po=1&np=1&fltt=2&invt=2&fid=f3&fs=${encodeURIComponent(fs)}&fields=${fields}&cb=?`;
     return new Promise((resolve, reject) => {
-      const cb = '_em_' + Date.now();
+      const cb = '_em_' + Date.now() + '_p' + pn;
       const s  = document.createElement('script');
       const t  = setTimeout(() => { cleanup(); reject(new Error('超时')); }, 10000);
       function cleanup() { clearTimeout(t); delete window[cb]; s.remove(); }
@@ -427,6 +426,27 @@
       document.head.appendChild(s);
     });
   }
+
+  // 分页抓取所有板块（每页100条，最多10页）
+  async function fetchLive(fsKey) {
+    const fs = FS_MAP[fsKey];
+    const allItems = [];
+    for (let pn = 1; pn <= 10; pn++) {
+      try {
+        const raw = await fetchOnePage(fs, pn);
+        const items = raw?.data?.diff || [];
+        if (!items.length) break;
+        allItems.push(...items);
+        if (allItems.length >= (raw?.data?.total || 9999)) break;
+        await new Promise(r => setTimeout(r, 200)); // 避免请求过快
+      } catch(e) {
+        console.warn(`第${pn}页失败:`, e);
+        break;
+      }
+    }
+    return { data: { diff: allItems } };
+  }
+
   function parseLive(raw) {
     return (raw?.data?.diff || []).map(item => ({
       code: item.f12, name: item.f14,
