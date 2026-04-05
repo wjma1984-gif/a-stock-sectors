@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A股板块涨跌榜</title>
+  <style>
+    :root {
+      --up: #f04a4a;
+      --up-bg: rgba(240,74,74,0.12);
+      --down: #0ecb81;
+      --down-bg: rgba(14,203,129,0.12);
+      --flat: #888;
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #21262d;
+      --text: #e6edf3;
+      --muted: #6e7681;
+      --accent: #58a6ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────── */
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    header h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+    }
+    header h1 span { color: var(--accent); }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: .82rem;
+      color: var(--muted);
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--flat);
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .status-dot.live { background: var(--up); box-shadow: 0 0 6px var(--up); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* ── Tabs ────────────────────────────────── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 16px 24px 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+    }
+    .tab-btn {
+      padding: 8px 18px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .9rem;
+      border-bottom: 2px solid transparent;
+      transition: all .2s;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── Sort Bar ────────────────────────────── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .sort-btns { display: flex; gap: 6px; }
+    .sort-btn {
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .8rem;
+      transition: all .2s;
+    }
+    .sort-btn:hover { color: var(--text); border-color: var(--accent); }
+    .sort-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .refresh-btn {
+      padding: 5px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: .82rem;
+      display: flex; align-items: center; gap: 6px;
+      transition: all .2s;
+    }
+    .refresh-btn:hover { color: var(--text); border-color: var(--accent); }
+    .refresh-btn svg { transition: transform .4s; }
+    .refresh-btn.spinning svg { animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Summary Cards ───────────────────────── */
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      padding: 0 24px 16px;
+    }
+    .s-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      text-align: center;
+    }
+    .s-card .s-label { font-size: .75rem; color: var(--muted); margin-bottom: 4px; }
+    .s-card .s-val { font-size: 1.3rem; font-weight: 700; }
+    .s-card .s-val.up { color: var(--up); }
+    .s-card .s-val.down { color: var(--down); }
+
+    /* ── Grid / List ─────────────────────────── */
+    #board-container {
+      padding: 0 24px 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 8px;
+    }
+
+    .sector-row {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color .2s;
+    }
+    .sector-row:hover { border-color: var(--accent); }
+
+    .s-rank {
+      width: 24px;
+      text-align: center;
+      font-size: .75rem;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .s-name {
+      flex: 0 0 110px;
+      font-size: .88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width .5s ease;
+    }
+    .bar-fill.up   { background: var(--up); }
+    .bar-fill.down { background: var(--down); }
+    .bar-fill.flat { background: var(--flat); }
+
+    .s-pct {
+      width: 58px;
+      text-align: right;
+      font-size: .9rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .s-pct.up   { color: var(--up); }
+    .s-pct.down { color: var(--down); }
+    .s-pct.flat { color: var(--flat); }
+
+    /* ── Loading / Error ─────────────────────── */
+    #loading {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--muted);
+      font-size: .9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    #error-msg {
+      display: none;
+      padding: 20px 24px;
+      background: rgba(240,74,74,.08);
+      border: 1px solid rgba(240,74,74,.3);
+      border-radius: 8px;
+      margin: 0 24px;
+      color: var(--up);
+      font-size: .88rem;
+    }
+
+    /* ── Heat Map View ───────────────────────── */
+    #board-container.heatmap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: flex-start;
+    }
+    #board-container.heatmap .sector-row {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px 8px;
+      width: auto;
+      cursor: default;
+      border-radius: 6px;
+    }
+    #board-container.heatmap .s-rank { display: none; }
+    #board-container.heatmap .s-name { flex: unset; font-size: .82rem; text-align: center; width: 80px; }
+    #board-container.heatmap .bar-wrap { display: none; }
+    #board-container.heatmap .s-pct { width: auto; font-size: .9rem; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: .75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <h1>📊 A股 <span>板块涨跌榜</span></h1>
+  <div class="meta">
+    <span><span class="status-dot" id="statusDot"></span><span id="marketStatus">加载中…</span></span>
+    <span>更新: <span id="updateTime">—</span></span>
+  </div>
+</header>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" data-fs="m:90+t:2+f:!50">行业板块</button>
+  <button class="tab-btn" data-fs="m:90+t:3+f:!50">概念板块</button>
+  <button class="tab-btn" data-fs="m:90+t:1+f:!50">地域板块</button>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="sort-btns">
+    <button class="sort-btn active" data-sort="pct">按涨跌幅</button>
+    <button class="sort-btn" data-sort="name">按名称</button>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="sort-btn" id="viewToggle">🔥 热力图</button>
+    <button class="refresh-btn" id="refreshBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.28"/>
+      </svg>
+      刷新
+    </button>
+  </div>
+</div>
+
+<!-- Summary -->
+<div class="summary" id="summary"></div>
+
+<!-- Error -->
+<div id="error-msg"></div>
+
+<!-- Loading -->
+<div id="loading"><div class="spinner"></div><span>正在获取行情数据…</span></div>
+
+<!-- Board -->
+<div id="board-container"></div>
+
+<footer>数据来源：东方财富  ·  仅供学习演示，不构成投资建议</footer>
+
+<script>
+  /* ── State ─────────────────────────────────── */
+  let allData = [];
+  let currentFs = 'm:90+t:2+f:!50';
+  let sortMode = 'pct';
+  let heatmapMode = false;
+  let refreshTimer = null;
+
+  /* ── DOM refs ──────────────────────────────── */
+  const boardEl = document.getElementById('board-container');
+  const loadingEl = document.getElementById('loading');
+  const errorEl = document.getElementById('error-msg');
+  const summaryEl = document.getElementById('summary');
+  const updateEl = document.getElementById('updateTime');
+  const statusEl = document.getElementById('marketStatus');
+  const dotEl = document.getElementById('statusDot');
+
+  /* ── Market status ─────────────────────────── */
+  function getMarketStatus() {
+    const now = new Date();
+    const bj = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
+    const h = bj.getHours(), m = bj.getMinutes(), day = bj.getDay();
+    const mins = h * 60 + m;
+    if (day === 0 || day === 6) return 'weekend';
+    if (mins >= 9*60+30 && mins < 11*60+30) return 'open';
+    if (mins >= 13*60 && mins < 15*60) return 'open';
+    if (mins >= 9*60+15 && mins < 9*60+30) return 'pre';
+    return 'closed';
+  }
+
+  function updateStatusBadge() {
+    const s = getMarketStatus();
+    const labels = { open: '交易中', pre: '集合竞价', closed: '已收盘', weekend: '休市' };
+    statusEl.textContent = labels[s] || '—';
+    dotEl.className = 'status-dot' + (s === 'open' || s === 'pre' ? ' live' : '');
+  }
+
+  /* ── Fetch ─────────────────────────────────── */
+  async function fetchSectors(fs) {
+    const fields = 'f2,f3,f4,f8,f12,f14,f15,f16,f17,f18,f20,f21,f62';
+    const url = `https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=200&po=1&np=1&fltt=2&invt=2&fid=f3&fs=${encodeURIComponent(fs)}&fields=${fields}&cb=?`;
+
+    return new Promise((resolve, reject) => {
+      const cbName = '_em_' + Date.now();
+      const script = document.createElement('script');
+      const timer = setTimeout(() => {
+        cleanup(); reject(new Error('请求超时'));
+      }, 10000);
+      function cleanup() { clearTimeout(timer); delete window[cbName]; script.remove(); }
+      window[cbName] = (data) => { cleanup(); resolve(data); };
+      script.src = url.replace('cb=?', 'cb=' + cbName);
+      script.onerror = () => { cleanup(); reject(new Error('网络错误')); };
+      document.head.appendChild(script);
+    });
+  }
+
+  /* ── Parse ─────────────────────────────────── */
+  function parseData(raw) {
+    const list = raw?.data?.diff || [];
+    return list.map(item => ({
+      code: item.f12,
+      name: item.f14,
+      price: item.f2,
+      pct: item.f3,       // 涨跌幅 %
+      chg: item.f4,       // 涨跌额
+      vol: item.f20,      // 总市值
+      flow: item.f62,     // 主力净流入
+    })).filter(d => d.name && d.pct !== undefined);
+  }
+
+  /* ── Summary ───────────────────────────────── */
+  function renderSummary(data) {
+    const ups = data.filter(d => d.pct > 0).length;
+    const downs = data.filter(d => d.pct < 0).length;
+    const avg = data.reduce((s, d) => s + (d.pct || 0), 0) / (data.length || 1);
+    const max = data.reduce((a, b) => (a.pct > b.pct ? a : b), data[0] || {});
+    const min = data.reduce((a, b) => (a.pct < b.pct ? a : b), data[0] || {});
+
+    summaryEl.innerHTML = `
+      <div class="s-card">
+        <div class="s-label">板块数</div>
+        <div class="s-val" style="color:var(--text)">${data.length}</div>
+      </div>
+      <div class="s-card">
+        <div class="s-label">上涨</div>
+        <div class="s-val up">${ups}</div>
+      </div>
+      <div class="s-card">
+        <div class="s-label">下跌</div>
+        <div class="s-val down">${downs}</div>
+      </div>
+      <div class="s-card">
+        <div class="s-label">平均涨跌</div>
+        <div class="s-val ${avg > 0 ? 'up' : avg < 0 ? 'down' : ''}">${fmt(avg)}</div>
+      </div>
+      <div class="s-card">
+        <div class="s-label">领涨</div>
+        <div class="s-val up" title="${max.name || ''}">${max.name ? max.name.slice(0,5) : '—'} ${fmt(max.pct)}</div>
+      </div>
+      <div class="s-card">
+        <div class="s-label">领跌</div>
+        <div class="s-val down" title="${min.name || ''}">${min.name ? min.name.slice(0,5) : '—'} ${fmt(min.pct)}</div>
+      </div>
+    `;
+  }
+
+  /* ── Format ────────────────────────────────── */
+  function fmt(v) {
+    if (v == null || v === '-') return '—';
+    const n = parseFloat(v);
+    if (isNaN(n)) return '—';
+    return (n > 0 ? '+' : '') + n.toFixed(2) + '%';
+  }
+  function cls(v) {
+    if (v > 0) return 'up';
+    if (v < 0) return 'down';
+    return 'flat';
+  }
+
+  /* ── Render board ──────────────────────────── */
+  function renderBoard(data) {
+    // Sort
+    let sorted = [...data];
+    if (sortMode === 'pct') sorted.sort((a, b) => (b.pct ?? -99) - (a.pct ?? -99));
+    else sorted.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+
+    // Max abs pct for bar scaling
+    const maxAbs = Math.max(...sorted.map(d => Math.abs(d.pct || 0)), 1);
+
+    if (heatmapMode) {
+      // Heat map: size by abs pct, color by direction
+      boardEl.innerHTML = sorted.map(d => {
+        const c = cls(d.pct);
+        const intensity = Math.min(Math.abs(d.pct || 0) / 5, 1); // normalize to 5%
+        const bg = d.pct > 0
+          ? `rgba(240,74,74,${0.15 + intensity * 0.6})`
+          : d.pct < 0
+          ? `rgba(14,203,129,${0.15 + intensity * 0.6})`
+          : 'var(--card)';
+        const size = 80 + Math.min(Math.abs(d.pct || 0) * 8, 60); // 80–140px
+        return `
+          <div class="sector-row" style="width:${size}px;background:${bg};border-color:transparent">
+            <div class="s-name">${d.name}</div>
+            <div class="s-pct ${c}">${fmt(d.pct)}</div>
+          </div>`;
+      }).join('');
+    } else {
+      // List / bar view
+      boardEl.innerHTML = sorted.map((d, i) => {
+        const c = cls(d.pct);
+        const barW = Math.round(Math.abs(d.pct || 0) / maxAbs * 100);
+        return `
+          <div class="sector-row">
+            <div class="s-rank">${i + 1}</div>
+            <div class="s-name" title="${d.name}">${d.name}</div>
+            <div class="bar-wrap">
+              <div class="bar-fill ${c}" style="width:${barW}%"></div>
+            </div>
+            <div class="s-pct ${c}">${fmt(d.pct)}</div>
+          </div>`;
+      }).join('');
+    }
+  }
+
+  /* ── Load ──────────────────────────────────── */
+  async function load(fs) {
+    loadingEl.style.display = 'flex';
+    boardEl.innerHTML = '';
+    summaryEl.innerHTML = '';
+    errorEl.style.display = 'none';
+    document.getElementById('refreshBtn').classList.add('spinning');
+
+    try {
+      const raw = await fetchSectors(fs);
+      allData = parseData(raw);
+      if (allData.length === 0) throw new Error('未获取到数据，可能非交易时段或 API 限流');
+      renderSummary(allData);
+      renderBoard(allData);
+      updateEl.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    } catch (e) {
+      errorEl.textContent = '⚠️ ' + e.message + '（东方财富 API 限制跨域或非交易时段数据为空）';
+      errorEl.style.display = 'block';
+      // Show demo data so the page looks good
+      loadDemoData();
+    } finally {
+      loadingEl.style.display = 'none';
+      document.getElementById('refreshBtn').classList.remove('spinning');
+      updateStatusBadge();
+    }
+  }
+
+  /* ── Demo fallback data ────────────────────── */
+  function loadDemoData() {
+    const sectors = [
+      '人工智能','半导体','新能源','医药生物','消费电子','军工','银行',
+      '保险','房地产','白酒','汽车','光伏','储能','CMOS','机器人',
+      '互联网','游戏','传媒','化工','钢铁','煤炭','有色金属','农业',
+      '食品饮料','商业零售','物流','航空','教育','环保','水务',
+    ];
+    allData = sectors.map((name, i) => ({
+      name,
+      pct: parseFloat((Math.random() * 10 - 4).toFixed(2)),
+      chg: 0, vol: 0, flow: 0,
+    }));
+    summaryEl.innerHTML = `<div class="s-card" style="grid-column:1/-1"><div class="s-label" style="color:var(--up)">⚠️ 演示数据（API 跨域受限，部署后实盘数据正常）</div></div>`;
+    renderSummary(allData);
+    renderBoard(allData);
+  }
+
+  /* ── Auto refresh every 30s during market ──── */
+  function scheduleRefresh() {
+    clearTimeout(refreshTimer);
+    const s = getMarketStatus();
+    if (s === 'open' || s === 'pre') {
+      refreshTimer = setTimeout(() => { load(currentFs); scheduleRefresh(); }, 30000);
+    }
+  }
+
+  /* ── Events ────────────────────────────────── */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFs = btn.dataset.fs;
+      load(currentFs);
+    });
+  });
+
+  document.querySelectorAll('.sort-btn[data-sort]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sort-btn[data-sort]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      sortMode = btn.dataset.sort;
+      if (allData.length) renderBoard(allData);
+    });
+  });
+
+  document.getElementById('viewToggle').addEventListener('click', function() {
+    heatmapMode = !heatmapMode;
+    this.textContent = heatmapMode ? '📋 列表视图' : '🔥 热力图';
+    boardEl.classList.toggle('heatmap', heatmapMode);
+    if (allData.length) renderBoard(allData);
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', () => load(currentFs));
+
+  /* ── Init ──────────────────────────────────── */
+  updateStatusBadge();
+  load(currentFs);
+  scheduleRefresh();
+</script>
+</body>
+</html>
