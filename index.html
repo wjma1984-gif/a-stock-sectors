@@ -39,11 +39,7 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    header h1 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: .03em;
-    }
+    header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: .03em; }
     header h1 span { color: var(--accent); }
 
     .meta {
@@ -70,6 +66,7 @@
       padding: 16px 24px 0;
       border-bottom: 1px solid var(--border);
       background: var(--card);
+      overflow-x: auto;
     }
     .tab-btn {
       padding: 8px 18px;
@@ -80,12 +77,10 @@
       font-size: .9rem;
       border-bottom: 2px solid transparent;
       transition: all .2s;
+      white-space: nowrap;
     }
     .tab-btn:hover { color: var(--text); }
-    .tab-btn.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
     /* ── Sort Bar ────────────────────────────── */
     .toolbar {
@@ -165,13 +160,7 @@
     }
     .sector-row:hover { border-color: var(--accent); }
 
-    .s-rank {
-      width: 24px;
-      text-align: center;
-      font-size: .75rem;
-      color: var(--muted);
-      flex-shrink: 0;
-    }
+    .s-rank { width: 24px; text-align: center; font-size: .75rem; color: var(--muted); flex-shrink: 0; }
     .s-name {
       flex: 0 0 110px;
       font-size: .88rem;
@@ -187,11 +176,7 @@
       border-radius: 4px;
       overflow: hidden;
     }
-    .bar-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width .5s ease;
-    }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
     .bar-fill.up   { background: var(--up); }
     .bar-fill.down { background: var(--down); }
     .bar-fill.flat { background: var(--flat); }
@@ -258,66 +243,108 @@
     #board-container.heatmap .bar-wrap { display: none; }
     #board-container.heatmap .s-pct { width: auto; font-size: .9rem; }
 
+    /* ── Big Sector View ─────────────────────── */
+    #big-container {
+      padding: 0 24px 32px;
+      display: none;
+    }
+    #big-toolbar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .big-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      transition: border-color .2s;
+    }
+    .big-card:hover { border-color: rgba(88,166,255,.4); }
+
+    .big-header {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      cursor: pointer;
+      gap: 12px;
+      user-select: none;
+    }
+    .big-header:hover { background: rgba(255,255,255,.02); }
+
+    .bh-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .bh-name { font-size: 1rem; font-weight: 700; flex: 1; }
+    .bh-bar-wrap {
+      flex: 0 0 120px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bh-bar-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
+    .bh-count { font-size: .75rem; color: var(--muted); width: 48px; text-align: center; flex-shrink: 0; }
+    .bh-avg {
+      font-size: 1.15rem;
+      font-weight: 700;
+      width: 72px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .bh-arrow {
+      color: var(--muted);
+      font-size: .75rem;
+      width: 16px;
+      text-align: center;
+      transition: transform .25s;
+      flex-shrink: 0;
+    }
+    .big-card.open .bh-arrow { transform: rotate(90deg); }
+
+    .big-subs {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 6px;
+    }
+    .big-card:not(.open) .big-subs { display: none; }
+    .big-card.open .big-subs { display: grid; }
+
+    .sub-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      transition: border-color .15s;
+    }
+    .sub-row:hover { border-color: var(--accent); }
+    .sub-name { flex: 1; font-size: .82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sub-bar-wrap { flex: 0 0 60px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .sub-bar-fill { height: 100%; border-radius: 3px; }
+    .sub-pct { width: 54px; text-align: right; font-size: .82rem; font-weight: 700; flex-shrink: 0; }
+
+    .big-empty {
+      padding: 12px;
+      text-align: center;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
     footer {
       text-align: center;
       padding: 20px;
       font-size: .75rem;
       color: var(--muted);
       border-top: 1px solid var(--border);
-    }
-
-    /* ── Guide Section ───────────────────────── */
-    .guide-title {
-      font-size: .95rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .guide-title span {
-      font-size: .78rem;
-      font-weight: 400;
-      color: var(--muted);
-    }
-    .guide-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px;
-    }
-    .g-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-      transition: border-color .2s, transform .15s;
-      cursor: default;
-    }
-    .g-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-    .g-card.theme:hover {
-      border-color: #f0a84a;
-    }
-    .g-icon {
-      font-size: 1.5rem;
-      margin-bottom: 6px;
-    }
-    .g-name {
-      font-size: .9rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .g-card.theme .g-name {
-      color: #f0d080;
-    }
-    .g-desc {
-      font-size: .76rem;
-      color: var(--muted);
-      line-height: 1.5;
     }
   </style>
 </head>
@@ -334,14 +361,29 @@
 
 <!-- Tabs -->
 <div class="tabs">
+  <button class="tab-btn" data-view="big" id="bigTab">🏷️ 大板块汇总</button>
   <button class="tab-btn active" data-fs="m:90+t:2+f:!50">行业板块</button>
   <button class="tab-btn" data-fs="m:90+t:3+f:!50">概念板块</button>
   <button class="tab-btn" data-fs="m:90+t:1+f:!50">地域板块</button>
-  <button class="tab-btn" data-view="guide" id="guideTab">📚 分类指南</button>
 </div>
 
-<!-- Toolbar -->
-<div class="toolbar">
+<!-- Big Toolbar -->
+<div id="big-toolbar">
+  <div class="sort-btns">
+    <button class="sort-btn active" id="bigSortPct" data-bigsort="pct">按涨跌幅</button>
+    <button class="sort-btn" id="bigSortName" data-bigsort="name">按名称</button>
+    <button class="sort-btn" id="bigExpandAll">全部展开</button>
+  </div>
+  <button class="refresh-btn" id="bigRefreshBtn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.28"/>
+    </svg>
+    刷新
+  </button>
+</div>
+
+<!-- Toolbar (normal view) -->
+<div class="toolbar" id="normalToolbar">
   <div class="sort-btns">
     <button class="sort-btn active" data-sort="pct">按涨跌幅</button>
     <button class="sort-btn" data-sort="name">按名称</button>
@@ -366,77 +408,144 @@
 <!-- Loading -->
 <div id="loading"><div class="spinner"></div><span>正在获取行情数据…</span></div>
 
-<!-- Board -->
+<!-- Normal Board -->
 <div id="board-container"></div>
 
-<!-- Guide Section -->
-<div id="guide-section" style="display:none;padding:0 24px 32px">
-
-  <div style="margin:20px 0 12px;font-size:.8rem;color:var(--muted)">
-    以下为 A 股市场常见的<strong style="color:var(--text)">高层级板块分类</strong>，帮助理解板块结构与投资逻辑。
-  </div>
-
-  <!-- 行业板块 -->
-  <div class="guide-title">📊 行业板块 <span>（相对稳定，按行业基本面划分）</span></div>
-  <div class="guide-grid" id="industry-grid">
-    <div class="g-card"><div class="g-icon">💻</div><div class="g-name">科技 / TMT</div><div class="g-desc">半导体、软件、AI、通信、消费电子</div></div>
-    <div class="g-card"><div class="g-icon">🏦</div><div class="g-name">大金融</div><div class="g-desc">银行、券商（牛市旗手）、保险</div></div>
-    <div class="g-card"><div class="g-icon">🛒</div><div class="g-name">大消费</div><div class="g-desc">白酒/食品饮料、零售、家电、餐饮</div></div>
-    <div class="g-card"><div class="g-icon">💊</div><div class="g-name">医药 / 医疗</div><div class="g-desc">生物医药、医疗器械、CXO、中药</div></div>
-    <div class="g-card"><div class="g-icon">⚡</div><div class="g-name">新能源</div><div class="g-desc">光伏、风电、储能、新能源车产业链</div></div>
-    <div class="g-card"><div class="g-icon">⛏️</div><div class="g-name">能源资源</div><div class="g-desc">煤炭、石油、天然气、有色金属</div></div>
-    <div class="g-card"><div class="g-icon">✈️</div><div class="g-name">军工 / 国防</div><div class="g-desc">航空装备、导弹、军用电子、船舶</div></div>
-    <div class="g-card"><div class="g-icon">🏠</div><div class="g-name">地产链</div><div class="g-desc">房地产开发、建材、建筑、家居装修</div></div>
-    <div class="g-card"><div class="g-icon">🔌</div><div class="g-name">公用事业</div><div class="g-desc">电力、水务、燃气、垃圾发电</div></div>
-    <div class="g-card"><div class="g-icon">🌾</div><div class="g-name">农业</div><div class="g-desc">农林牧渔、种业、化肥、农药</div></div>
-    <div class="g-card"><div class="g-icon">🚗</div><div class="g-name">汽车</div><div class="g-desc">整车、零部件、智能驾驶、车联网</div></div>
-    <div class="g-card"><div class="g-icon">🏭</div><div class="g-name">工业机械</div><div class="g-desc">工程机械、机床、自动化、仪器仪表</div></div>
-  </div>
-
-  <!-- 主题板块 -->
-  <div class="guide-title" style="margin-top:28px">🔥 主题 / 概念板块 <span>（热点轮动，跟随政策与事件）</span></div>
-  <div class="guide-grid">
-    <div class="g-card theme"><div class="g-icon">🤖</div><div class="g-name">人工智能 / AI</div><div class="g-desc">算力、大模型、AI 应用、Agent</div></div>
-    <div class="g-card theme"><div class="g-icon">🦾</div><div class="g-name">机器人</div><div class="g-desc">人形机器人、工业机器人、减速器</div></div>
-    <div class="g-card theme"><div class="g-icon">🚁</div><div class="g-name">低空经济</div><div class="g-desc">无人机、eVTOL、航空物流、飞行汽车</div></div>
-    <div class="g-card theme"><div class="g-icon">💰</div><div class="g-name">红利 / 高股息</div><div class="g-desc">稳定分红、防御属性，适合长期持有</div></div>
-    <div class="g-card theme"><div class="g-icon">🌍</div><div class="g-name">出行 / 旅游</div><div class="g-desc">航空、酒店、景区、免税、OTA 平台</div></div>
-    <div class="g-card theme"><div class="g-icon">🔧</div><div class="g-name">国产替代</div><div class="g-desc">芯片自主、工业软件、信创、关键材料</div></div>
-    <div class="g-card theme"><div class="g-icon">🏛️</div><div class="g-name">央企 / 中特估</div><div class="g-desc">央国企重估，政策驱动估值修复</div></div>
-    <div class="g-card theme"><div class="g-icon">🌐</div><div class="g-name">数字经济</div><div class="g-desc">大数据、云计算、数据要素、工业互联网</div></div>
-    <div class="g-card theme"><div class="g-icon">📱</div><div class="g-name">华为概念</div><div class="g-desc">鸿蒙生态、麒麟芯片、华为供应链</div></div>
-    <div class="g-card theme"><div class="g-icon">💄</div><div class="g-name">医美</div><div class="g-desc">玻尿酸、医美耗材、轻医美、颜值经济</div></div>
-    <div class="g-card theme"><div class="g-icon">🔬</div><div class="g-name">半导体 / 芯片</div><div class="g-desc">晶圆代工、封测、EDA、材料设备</div></div>
-    <div class="g-card theme"><div class="g-icon">🔋</div><div class="g-name">储能</div><div class="g-desc">电化学储能、飞轮、压缩空气、液流电池</div></div>
-  </div>
-
-  <!-- 逻辑说明 -->
-  <div style="margin-top:24px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:.82rem;line-height:1.8;color:var(--muted)">
-    💡 <strong style="color:var(--text)">投资逻辑</strong>：行业板块看<strong style="color:var(--accent)">周期和基本面</strong>，主题板块跟<strong style="color:#f0a84a)">政策和热点</strong>走。
-    实操中常将两者结合：先定行业大方向（如科技），再找当下热点主题（如 AI 算力）锁定细分机会。
-  </div>
-</div>
+<!-- Big Sector Board -->
+<div id="big-container"></div>
 
 <footer>数据来源：东方财富  ·  仅供学习演示，不构成投资建议</footer>
 
 <script>
-  /* ── State ─────────────────────────────────── */
+  /* ═══════════════════════════════════════════
+     大板块分类配置
+     keywords: 命中任一关键词即归入该类
+  ═══════════════════════════════════════════ */
+  const BIG_SECTORS = [
+    {
+      name: '科技 / TMT',
+      icon: '💻',
+      color: '#58a6ff',
+      keywords: ['半导体','芯片','集成电路','软件','信息技术','计算机','人工智能','AI','算力',
+                 '云计算','大数据','互联网','5G','物联网','通信','消费电子','电子','游戏',
+                 '传媒','光模块','PCB','存储','数字媒体','数据中心','服务器','智能硬件',
+                 '工业软件','信创','EDA','ChatGPT','DeepSeek','鸿蒙','元宇宙'],
+    },
+    {
+      name: '大金融',
+      icon: '🏦',
+      color: '#f0a84a',
+      keywords: ['银行','证券','保险','券商','信托','期货','多元金融','非银金融','金融科技'],
+    },
+    {
+      name: '大消费',
+      icon: '🛒',
+      color: '#e879a0',
+      keywords: ['食品饮料','白酒','啤酒','乳品','调味品','家用电器','家电','商贸零售',
+                 '纺织服装','社会服务','美容护理','轻工','餐饮','超市','零售','服装',
+                 '医美','化妆品','护肤','烟草'],
+    },
+    {
+      name: '医药 / 医疗',
+      icon: '💊',
+      color: '#3fb950',
+      keywords: ['医药','医疗','生物','CXO','中药','药','医院','疫苗','基因','血液制品',
+                 '体外诊断','IVD','医疗器械','医疗服务','生命科学','眼科','齿科','康复'],
+    },
+    {
+      name: '新能源',
+      icon: '⚡',
+      color: '#ffd700',
+      keywords: ['光伏','风电','储能','新能源汽车','锂电','氢能','充电桩','电力设备',
+                 '电池','BIPV','钙钛矿','异质结','碳中和','绿电','核电'],
+    },
+    {
+      name: '能源资源',
+      icon: '⛏️',
+      color: '#d29922',
+      keywords: ['煤炭','石油','天然气','有色金属','钢铁','黄金','铜','铝','稀土','化工',
+                 '基础化工','磷化工','氟化工','锂矿','镍','钴','锰','钨','钼','铁矿'],
+    },
+    {
+      name: '军工 / 国防',
+      icon: '✈️',
+      color: '#8b949e',
+      keywords: ['军工','国防','航天','航空发动机','船舶','兵器','核电','卫星','雷达',
+                 '无人机','导弹','军用','战斗机','歼'],
+    },
+    {
+      name: '地产链',
+      icon: '🏠',
+      color: '#a371f7',
+      keywords: ['房地产','建筑','建材','装修','家居','水泥','玻璃','瓷砖','涂料','防水'],
+    },
+    {
+      name: '出行 / 旅游',
+      icon: '✈️',
+      color: '#79c0ff',
+      keywords: ['航空','机场','酒店','旅游','免税','交通运输','铁路','公路','港口',
+                 '物流','快递','航运','景区','出境游'],
+    },
+    {
+      name: '汽车',
+      icon: '🚗',
+      color: '#56d364',
+      keywords: ['汽车','整车','零部件','智能驾驶','自动驾驶','车联网','车载','轮胎'],
+    },
+    {
+      name: '机器人',
+      icon: '🦾',
+      color: '#ff9500',
+      keywords: ['机器人','人形机器人','工业机器人','减速器','丝杠','执行器','协作机器人'],
+    },
+    {
+      name: '低空经济',
+      icon: '🚁',
+      color: '#30bfbf',
+      keywords: ['低空经济','eVTOL','飞行汽车','无人机','通用航空','空中出行'],
+    },
+    {
+      name: '农业',
+      icon: '🌾',
+      color: '#7ee787',
+      keywords: ['农林牧渔','农业','种业','化肥','农药','种猪','生猪','水产','种植'],
+    },
+    {
+      name: '公用事业',
+      icon: '🔌',
+      color: '#40a6ff',
+      keywords: ['公用事业','电力','水务','燃气','垃圾','环保','污水','固废','危废'],
+    },
+  ];
+
+  /* ═══════════════════════════════════════════
+     State
+  ═══════════════════════════════════════════ */
   let allData = [];
+  let bigData = [];          // cache for big view
   let currentFs = 'm:90+t:2+f:!50';
   let sortMode = 'pct';
+  let bigSortMode = 'pct';
   let heatmapMode = false;
+  let viewMode = 'normal';   // 'normal' | 'big'
+  let allExpanded = false;
   let refreshTimer = null;
 
   /* ── DOM refs ──────────────────────────────── */
-  const boardEl = document.getElementById('board-container');
-  const loadingEl = document.getElementById('loading');
-  const errorEl = document.getElementById('error-msg');
-  const summaryEl = document.getElementById('summary');
-  const updateEl = document.getElementById('updateTime');
-  const statusEl = document.getElementById('marketStatus');
-  const dotEl = document.getElementById('statusDot');
+  const boardEl       = document.getElementById('board-container');
+  const bigEl         = document.getElementById('big-container');
+  const loadingEl     = document.getElementById('loading');
+  const errorEl       = document.getElementById('error-msg');
+  const summaryEl     = document.getElementById('summary');
+  const updateEl      = document.getElementById('updateTime');
+  const statusEl      = document.getElementById('marketStatus');
+  const dotEl         = document.getElementById('statusDot');
+  const normalToolbar = document.getElementById('normalToolbar');
+  const bigToolbar    = document.getElementById('big-toolbar');
 
-  /* ── Market status ─────────────────────────── */
+  /* ═══════════════════════════════════════════
+     Market status
+  ═══════════════════════════════════════════ */
   function getMarketStatus() {
     const now = new Date();
     const bj = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
@@ -448,7 +557,6 @@
     if (mins >= 9*60+15 && mins < 9*60+30) return 'pre';
     return 'closed';
   }
-
   function updateStatusBadge() {
     const s = getMarketStatus();
     const labels = { open: '交易中', pre: '集合竞价', closed: '已收盘', weekend: '休市' };
@@ -456,17 +564,16 @@
     dotEl.className = 'status-dot' + (s === 'open' || s === 'pre' ? ' live' : '');
   }
 
-  /* ── Fetch ─────────────────────────────────── */
-  async function fetchSectors(fs) {
+  /* ═══════════════════════════════════════════
+     Fetch
+  ═══════════════════════════════════════════ */
+  function fetchSectors(fs) {
     const fields = 'f2,f3,f4,f8,f12,f14,f15,f16,f17,f18,f20,f21,f62';
     const url = `https://push2.eastmoney.com/api/qt/clist/get?pn=1&pz=200&po=1&np=1&fltt=2&invt=2&fid=f3&fs=${encodeURIComponent(fs)}&fields=${fields}&cb=?`;
-
     return new Promise((resolve, reject) => {
       const cbName = '_em_' + Date.now();
       const script = document.createElement('script');
-      const timer = setTimeout(() => {
-        cleanup(); reject(new Error('请求超时'));
-      }, 10000);
+      const timer = setTimeout(() => { cleanup(); reject(new Error('请求超时')); }, 10000);
       function cleanup() { clearTimeout(timer); delete window[cbName]; script.remove(); }
       window[cbName] = (data) => { cleanup(); resolve(data); };
       script.src = url.replace('cb=?', 'cb=' + cbName);
@@ -475,57 +582,18 @@
     });
   }
 
-  /* ── Parse ─────────────────────────────────── */
   function parseData(raw) {
     const list = raw?.data?.diff || [];
     return list.map(item => ({
-      code: item.f12,
-      name: item.f14,
-      price: item.f2,
-      pct: item.f3,       // 涨跌幅 %
-      chg: item.f4,       // 涨跌额
-      vol: item.f20,      // 总市值
-      flow: item.f62,     // 主力净流入
+      code: item.f12, name: item.f14,
+      price: item.f2, pct: item.f3,
+      chg: item.f4,   vol: item.f20, flow: item.f62,
     })).filter(d => d.name && d.pct !== undefined);
   }
 
-  /* ── Summary ───────────────────────────────── */
-  function renderSummary(data) {
-    const ups = data.filter(d => d.pct > 0).length;
-    const downs = data.filter(d => d.pct < 0).length;
-    const avg = data.reduce((s, d) => s + (d.pct || 0), 0) / (data.length || 1);
-    const max = data.reduce((a, b) => (a.pct > b.pct ? a : b), data[0] || {});
-    const min = data.reduce((a, b) => (a.pct < b.pct ? a : b), data[0] || {});
-
-    summaryEl.innerHTML = `
-      <div class="s-card">
-        <div class="s-label">板块数</div>
-        <div class="s-val" style="color:var(--text)">${data.length}</div>
-      </div>
-      <div class="s-card">
-        <div class="s-label">上涨</div>
-        <div class="s-val up">${ups}</div>
-      </div>
-      <div class="s-card">
-        <div class="s-label">下跌</div>
-        <div class="s-val down">${downs}</div>
-      </div>
-      <div class="s-card">
-        <div class="s-label">平均涨跌</div>
-        <div class="s-val ${avg > 0 ? 'up' : avg < 0 ? 'down' : ''}">${fmt(avg)}</div>
-      </div>
-      <div class="s-card">
-        <div class="s-label">领涨</div>
-        <div class="s-val up" title="${max.name || ''}">${max.name ? max.name.slice(0,5) : '—'} ${fmt(max.pct)}</div>
-      </div>
-      <div class="s-card">
-        <div class="s-label">领跌</div>
-        <div class="s-val down" title="${min.name || ''}">${min.name ? min.name.slice(0,5) : '—'} ${fmt(min.pct)}</div>
-      </div>
-    `;
-  }
-
-  /* ── Format ────────────────────────────────── */
+  /* ═══════════════════════════════════════════
+     Helpers
+  ═══════════════════════════════════════════ */
   function fmt(v) {
     if (v == null || v === '-') return '—';
     const n = parseFloat(v);
@@ -533,57 +601,149 @@
     return (n > 0 ? '+' : '') + n.toFixed(2) + '%';
   }
   function cls(v) {
-    if (v > 0) return 'up';
-    if (v < 0) return 'down';
-    return 'flat';
+    if (v > 0) return 'up'; if (v < 0) return 'down'; return 'flat';
+  }
+  function clr(v) {
+    if (v > 0) return 'var(--up)'; if (v < 0) return 'var(--down)'; return 'var(--flat)';
   }
 
-  /* ── Render board ──────────────────────────── */
-  function renderBoard(data) {
-    // Sort
-    let sorted = [...data];
-    if (sortMode === 'pct') sorted.sort((a, b) => (b.pct ?? -99) - (a.pct ?? -99));
-    else sorted.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+  /* ═══════════════════════════════════════════
+     Big sector grouping
+  ═══════════════════════════════════════════ */
+  function matchBig(name) {
+    for (const big of BIG_SECTORS) {
+      for (const kw of big.keywords) {
+        if (name.includes(kw)) return big.name;
+      }
+    }
+    return '其他';
+  }
 
-    // Max abs pct for bar scaling
-    const maxAbs = Math.max(...sorted.map(d => Math.abs(d.pct || 0)), 1);
+  function groupIntoBig(data) {
+    const map = {};
+    // init
+    for (const b of BIG_SECTORS) {
+      map[b.name] = { ...b, subs: [], pctSum: 0, avgPct: 0 };
+    }
+    map['其他'] = { name: '其他', icon: '📦', color: '#6e7681', subs: [], pctSum: 0, avgPct: 0 };
+
+    for (const d of data) {
+      const key = matchBig(d.name);
+      if (!map[key]) map[key] = { name: key, icon: '📦', color: '#6e7681', subs: [], pctSum: 0, avgPct: 0 };
+      map[key].subs.push(d);
+      map[key].pctSum += (parseFloat(d.pct) || 0);
+    }
+
+    // calc avg, remove empties (except 其他)
+    const result = Object.values(map).filter(g => g.subs.length > 0);
+    for (const g of result) {
+      g.avgPct = g.pctSum / g.subs.length;
+      // sort subs by pct desc
+      g.subs.sort((a, b) => (parseFloat(b.pct) || 0) - (parseFloat(a.pct) || 0));
+    }
+    return result;
+  }
+
+  /* ═══════════════════════════════════════════
+     Summary bar
+  ═══════════════════════════════════════════ */
+  function renderSummary(data) {
+    const ups = data.filter(d => d.pct > 0).length;
+    const downs = data.filter(d => d.pct < 0).length;
+    const avg = data.reduce((s, d) => s + (parseFloat(d.pct) || 0), 0) / (data.length || 1);
+    const max = data.reduce((a, b) => ((a.pct??-99) > (b.pct??-99) ? a : b), data[0] || {});
+    const min = data.reduce((a, b) => ((a.pct??99) < (b.pct??99) ? a : b), data[0] || {});
+    summaryEl.innerHTML = `
+      <div class="s-card"><div class="s-label">板块数</div><div class="s-val" style="color:var(--text)">${data.length}</div></div>
+      <div class="s-card"><div class="s-label">上涨</div><div class="s-val up">${ups}</div></div>
+      <div class="s-card"><div class="s-label">下跌</div><div class="s-val down">${downs}</div></div>
+      <div class="s-card"><div class="s-label">平均涨跌</div><div class="s-val ${cls(avg)}">${fmt(avg)}</div></div>
+      <div class="s-card"><div class="s-label">领涨</div><div class="s-val up" title="${max.name||''}">${max.name?max.name.slice(0,5):'—'} ${fmt(max.pct)}</div></div>
+      <div class="s-card"><div class="s-label">领跌</div><div class="s-val down" title="${min.name||''}">${min.name?min.name.slice(0,5):'—'} ${fmt(min.pct)}</div></div>`;
+  }
+
+  /* ═══════════════════════════════════════════
+     Render: normal board
+  ═══════════════════════════════════════════ */
+  function renderBoard(data) {
+    let sorted = [...data];
+    if (sortMode === 'pct') sorted.sort((a, b) => ((b.pct??-99)-(a.pct??-99)));
+    else sorted.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+    const maxAbs = Math.max(...sorted.map(d => Math.abs(d.pct||0)), 1);
 
     if (heatmapMode) {
-      // Heat map: size by abs pct, color by direction
       boardEl.innerHTML = sorted.map(d => {
-        const c = cls(d.pct);
-        const intensity = Math.min(Math.abs(d.pct || 0) / 5, 1); // normalize to 5%
-        const bg = d.pct > 0
-          ? `rgba(240,74,74,${0.15 + intensity * 0.6})`
-          : d.pct < 0
-          ? `rgba(14,203,129,${0.15 + intensity * 0.6})`
-          : 'var(--card)';
-        const size = 80 + Math.min(Math.abs(d.pct || 0) * 8, 60); // 80–140px
-        return `
-          <div class="sector-row" style="width:${size}px;background:${bg};border-color:transparent">
-            <div class="s-name">${d.name}</div>
-            <div class="s-pct ${c}">${fmt(d.pct)}</div>
-          </div>`;
+        const intensity = Math.min(Math.abs(d.pct||0)/5,1);
+        const bg = d.pct>0 ? `rgba(240,74,74,${0.15+intensity*.6})`
+                 : d.pct<0 ? `rgba(14,203,129,${0.15+intensity*.6})` : 'var(--card)';
+        const size = 80 + Math.min(Math.abs(d.pct||0)*8, 60);
+        return `<div class="sector-row" style="width:${size}px;background:${bg};border-color:transparent">
+                  <div class="s-name">${d.name}</div>
+                  <div class="s-pct ${cls(d.pct)}">${fmt(d.pct)}</div></div>`;
       }).join('');
     } else {
-      // List / bar view
-      boardEl.innerHTML = sorted.map((d, i) => {
-        const c = cls(d.pct);
-        const barW = Math.round(Math.abs(d.pct || 0) / maxAbs * 100);
-        return `
-          <div class="sector-row">
-            <div class="s-rank">${i + 1}</div>
-            <div class="s-name" title="${d.name}">${d.name}</div>
-            <div class="bar-wrap">
-              <div class="bar-fill ${c}" style="width:${barW}%"></div>
-            </div>
-            <div class="s-pct ${c}">${fmt(d.pct)}</div>
-          </div>`;
+      boardEl.innerHTML = sorted.map((d,i) => {
+        const barW = Math.round(Math.abs(d.pct||0)/maxAbs*100);
+        return `<div class="sector-row">
+                  <div class="s-rank">${i+1}</div>
+                  <div class="s-name" title="${d.name}">${d.name}</div>
+                  <div class="bar-wrap"><div class="bar-fill ${cls(d.pct)}" style="width:${barW}%"></div></div>
+                  <div class="s-pct ${cls(d.pct)}">${fmt(d.pct)}</div></div>`;
       }).join('');
     }
   }
 
-  /* ── Load ──────────────────────────────────── */
+  /* ═══════════════════════════════════════════
+     Render: big sector board
+  ═══════════════════════════════════════════ */
+  function renderBigBoard(groups) {
+    let sorted = [...groups];
+    if (bigSortMode === 'pct') sorted.sort((a,b) => b.avgPct - a.avgPct);
+    else sorted.sort((a,b) => a.name.localeCompare(b.name,'zh'));
+
+    const maxAbsAvg = Math.max(...sorted.map(g => Math.abs(g.avgPct)), 1);
+
+    bigEl.innerHTML = sorted.map(g => {
+      const avgPct = g.avgPct;
+      const barW = Math.round(Math.abs(avgPct) / maxAbsAvg * 100);
+      const c = cls(avgPct);
+
+      // sub-sectors
+      const maxAbsSub = Math.max(...g.subs.map(s => Math.abs(s.pct||0)), 1);
+      const subsHtml = g.subs.map(s => {
+        const sw = Math.round(Math.abs(s.pct||0)/maxAbsSub*100);
+        return `<div class="sub-row">
+                  <div class="sub-name" title="${s.name}">${s.name}</div>
+                  <div class="sub-bar-wrap"><div class="sub-bar-fill ${cls(s.pct)}" style="width:${sw}%;background:${clr(s.pct)}"></div></div>
+                  <div class="sub-pct ${cls(s.pct)}">${fmt(s.pct)}</div>
+                </div>`;
+      }).join('');
+
+      const isOpen = allExpanded ? 'open' : '';
+      return `
+        <div class="big-card ${isOpen}" data-name="${g.name}">
+          <div class="big-header" onclick="toggleBig(this.parentElement)">
+            <div class="bh-icon">${g.icon}</div>
+            <div class="bh-name">${g.name}</div>
+            <div class="bh-bar-wrap">
+              <div class="bh-bar-fill" style="width:${barW}%;background:${clr(avgPct)}"></div>
+            </div>
+            <div class="bh-count">${g.subs.length} 个</div>
+            <div class="bh-avg ${c}">${fmt(avgPct)}</div>
+            <div class="bh-arrow">▶</div>
+          </div>
+          <div class="big-subs">${subsHtml || '<div class="big-empty">暂无数据</div>'}</div>
+        </div>`;
+    }).join('');
+  }
+
+  function toggleBig(card) {
+    card.classList.toggle('open');
+  }
+
+  /* ═══════════════════════════════════════════
+     Load: normal tabs
+  ═══════════════════════════════════════════ */
   async function load(fs) {
     loadingEl.style.display = 'flex';
     boardEl.innerHTML = '';
@@ -597,12 +757,11 @@
       if (allData.length === 0) throw new Error('未获取到数据，可能非交易时段或 API 限流');
       renderSummary(allData);
       renderBoard(allData);
-      updateEl.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    } catch (e) {
+      updateEl.textContent = new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    } catch(e) {
       errorEl.textContent = '⚠️ ' + e.message + '（东方财富 API 限制跨域或非交易时段数据为空）';
       errorEl.style.display = 'block';
-      // Show demo data so the page looks good
-      loadDemoData();
+      loadDemoData(false);
     } finally {
       loadingEl.style.display = 'none';
       document.getElementById('refreshBtn').classList.remove('spinning');
@@ -610,66 +769,137 @@
     }
   }
 
-  /* ── Demo fallback data ────────────────────── */
-  function loadDemoData() {
-    const sectors = [
-      '人工智能','半导体','新能源','医药生物','消费电子','军工','银行',
-      '保险','房地产','白酒','汽车','光伏','储能','CMOS','机器人',
-      '互联网','游戏','传媒','化工','钢铁','煤炭','有色金属','农业',
-      '食品饮料','商业零售','物流','航空','教育','环保','水务',
-    ];
-    allData = sectors.map((name, i) => ({
-      name,
-      pct: parseFloat((Math.random() * 10 - 4).toFixed(2)),
-      chg: 0, vol: 0, flow: 0,
-    }));
-    summaryEl.innerHTML = `<div class="s-card" style="grid-column:1/-1"><div class="s-label" style="color:var(--up)">⚠️ 演示数据（API 跨域受限，部署后实盘数据正常）</div></div>`;
-    renderSummary(allData);
-    renderBoard(allData);
+  /* ═══════════════════════════════════════════
+     Load: big sectors (fetch both industry + concept)
+  ═══════════════════════════════════════════ */
+  async function loadBig() {
+    loadingEl.style.display = 'flex';
+    bigEl.innerHTML = '';
+    summaryEl.innerHTML = '';
+    errorEl.style.display = 'none';
+    document.getElementById('bigRefreshBtn').classList.add('spinning');
+
+    try {
+      // fetch industry + concept simultaneously
+      const [rawInd, rawCon] = await Promise.all([
+        fetchSectors('m:90+t:2+f:!50'),
+        fetchSectors('m:90+t:3+f:!50'),
+      ]);
+      const ind = parseData(rawInd);
+      const con = parseData(rawCon);
+      // merge, deduplicate by name
+      const nameSet = new Set(ind.map(d => d.name));
+      const merged = [...ind, ...con.filter(d => !nameSet.has(d.name))];
+
+      if (merged.length === 0) throw new Error('未获取到数据');
+
+      bigData = merged;
+      renderSummary(merged);
+      const groups = groupIntoBig(merged);
+      renderBigBoard(groups);
+      updateEl.textContent = new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    } catch(e) {
+      errorEl.textContent = '⚠️ ' + e.message;
+      errorEl.style.display = 'block';
+      loadDemoData(true);
+    } finally {
+      loadingEl.style.display = 'none';
+      document.getElementById('bigRefreshBtn').classList.remove('spinning');
+      updateStatusBadge();
+    }
   }
 
-  /* ── Auto refresh every 30s during market ──── */
+  /* ═══════════════════════════════════════════
+     Demo fallback
+  ═══════════════════════════════════════════ */
+  function loadDemoData(isBig) {
+    const names = [
+      '半导体','软件开发','人工智能','消费电子','通信设备','云计算','大数据',
+      '银行','证券','保险',
+      '食品饮料','白酒','家用电器','商贸零售',
+      '医药生物','医疗器械','医疗服务',
+      '光伏设备','风电','储能','新能源汽车',
+      '煤炭','有色金属','基础化工','钢铁',
+      '军工','国防',
+      '房地产','建筑材料',
+      '航空','酒店旅游','免税',
+      '汽车','汽车零部件',
+      '机器人','人形机器人',
+      '农林牧渔',
+      '公用事业','环保',
+    ];
+    const demo = names.map(name => ({
+      name, pct: parseFloat((Math.random()*10-4).toFixed(2)),
+    }));
+
+    summaryEl.innerHTML = `<div class="s-card" style="grid-column:1/-1">
+      <div class="s-label" style="color:var(--up)">⚠️ 演示数据（部署后实盘数据正常）</div></div>`;
+    renderSummary(demo);
+
+    if (isBig) {
+      const groups = groupIntoBig(demo);
+      renderBigBoard(groups);
+    } else {
+      allData = demo;
+      renderBoard(demo);
+    }
+  }
+
+  /* ═══════════════════════════════════════════
+     Auto refresh
+  ═══════════════════════════════════════════ */
   function scheduleRefresh() {
     clearTimeout(refreshTimer);
     const s = getMarketStatus();
     if (s === 'open' || s === 'pre') {
-      refreshTimer = setTimeout(() => { load(currentFs); scheduleRefresh(); }, 30000);
+      refreshTimer = setTimeout(() => {
+        if (viewMode === 'big') loadBig(); else load(currentFs);
+        scheduleRefresh();
+      }, 30000);
     }
   }
 
-  /* ── Events ────────────────────────────────── */
-  /* ── Tab events ────────────────────────────── */
-  const guideSection = document.getElementById('guide-section');
-  const toolbar = document.querySelector('.toolbar');
-  const summary = document.getElementById('summary');
-  const boardContainer = document.getElementById('board-container');
-  const loadingDiv = document.getElementById('loading');
+  /* ═══════════════════════════════════════════
+     View switching
+  ═══════════════════════════════════════════ */
+  function showNormalView() {
+    viewMode = 'normal';
+    bigEl.style.display = 'none';
+    bigToolbar.style.display = 'none';
+    boardEl.style.display = '';
+    normalToolbar.style.display = '';
+    summaryEl.style.display = '';
+  }
+  function showBigView() {
+    viewMode = 'big';
+    boardEl.style.display = 'none';
+    normalToolbar.style.display = 'none';
+    bigEl.style.display = 'block';
+    bigToolbar.style.display = 'flex';
+    summaryEl.style.display = '';
+  }
 
+  /* ═══════════════════════════════════════════
+     Events
+  ═══════════════════════════════════════════ */
+  // Tab clicks
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
-      if (btn.dataset.view === 'guide') {
-        // Show guide, hide market board
-        guideSection.style.display = 'block';
-        toolbar.style.display = 'none';
-        summary.style.display = 'none';
-        boardContainer.style.display = 'none';
-        loadingDiv.style.display = 'none';
-        errorEl.style.display = 'none';
+      if (btn.dataset.view === 'big') {
+        showBigView();
+        loadBig();
       } else {
-        // Show market board, hide guide
-        guideSection.style.display = 'none';
-        toolbar.style.display = '';
-        summary.style.display = '';
-        boardContainer.style.display = '';
+        showNormalView();
         currentFs = btn.dataset.fs;
         load(currentFs);
       }
     });
   });
 
+  // Normal sort
   document.querySelectorAll('.sort-btn[data-sort]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.sort-btn[data-sort]').forEach(b => b.classList.remove('active'));
@@ -679,6 +909,26 @@
     });
   });
 
+  // Big sort
+  document.querySelectorAll('.sort-btn[data-bigsort]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sort-btn[data-bigsort]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      bigSortMode = btn.dataset.bigsort;
+      if (bigData.length) renderBigBoard(groupIntoBig(bigData));
+    });
+  });
+
+  // Expand all / collapse all
+  document.getElementById('bigExpandAll').addEventListener('click', function() {
+    allExpanded = !allExpanded;
+    this.textContent = allExpanded ? '全部收起' : '全部展开';
+    document.querySelectorAll('.big-card').forEach(card => {
+      card.classList.toggle('open', allExpanded);
+    });
+  });
+
+  // Heatmap toggle
   document.getElementById('viewToggle').addEventListener('click', function() {
     heatmapMode = !heatmapMode;
     this.textContent = heatmapMode ? '📋 列表视图' : '🔥 热力图';
@@ -686,11 +936,19 @@
     if (allData.length) renderBoard(allData);
   });
 
+  // Refresh buttons
   document.getElementById('refreshBtn').addEventListener('click', () => load(currentFs));
+  document.getElementById('bigRefreshBtn').addEventListener('click', () => loadBig());
 
-  /* ── Init ──────────────────────────────────── */
+  /* ═══════════════════════════════════════════
+     Init — default to 大板块 view
+  ═══════════════════════════════════════════ */
   updateStatusBadge();
-  load(currentFs);
+  // Activate big tab by default
+  document.querySelector('[data-view="big"]').classList.add('active');
+  document.querySelector('[data-fs="m:90+t:2+f:!50"]').classList.remove('active');
+  showBigView();
+  loadBig();
   scheduleRefresh();
 </script>
 </body>
