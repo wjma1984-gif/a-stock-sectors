@@ -333,6 +333,70 @@
     ]},
   ];
 
+
+  /* ═══════════════════════════════════════
+     申万一级行业 → 大板块 映射（精确，无需猜关键词）
+     31 个申万一级行业，硬编码归入大类
+  ═══════════════════════════════════════ */
+  const SW_BIG_MAP = {
+    '农林牧渔': { cat: '农业',      icon: '🌾' },
+    '基础化工': { cat: '能源资源',  icon: '⛏️' },
+    '钢铁':     { cat: '能源资源',  icon: '⛏️' },
+    '有色金属': { cat: '能源资源',  icon: '⛏️' },
+    '电子':     { cat: '科技/TMT',  icon: '💻' },
+    '汽车':     { cat: '汽车',      icon: '🚗' },
+    '家用电器': { cat: '大消费',    icon: '🛒' },
+    '食品饮料': { cat: '大消费',    icon: '🛒' },
+    '纺织服饰': { cat: '大消费',    icon: '🛒' },
+    '轻工制造': { cat: '大消费',    icon: '🛒' },
+    '医药生物': { cat: '医药/医疗', icon: '💊' },
+    '公用事业': { cat: '公用事业',  icon: '🔌' },
+    '交通运输': { cat: '出行/旅游', icon: '✈️' },
+    '房地产':   { cat: '地产链',    icon: '🏠' },
+    '商贸零售': { cat: '大消费',    icon: '🛒' },
+    '社会服务': { cat: '出行/旅游', icon: '✈️' },
+    '银行':     { cat: '大金融',    icon: '🏦' },
+    '非银金融': { cat: '大金融',    icon: '🏦' },
+    '综合':     { cat: '其他',      icon: '📦' },
+    '建筑材料': { cat: '地产链',    icon: '🏠' },
+    '建筑装饰': { cat: '地产链',    icon: '🏠' },
+    '电力设备': { cat: '新能源',    icon: '⚡' },
+    '机械设备': { cat: '工业/制造', icon: '🏭' },
+    '国防军工': { cat: '军工/国防', icon: '🛡️' },
+    '计算机':   { cat: '科技/TMT',  icon: '💻' },
+    '传媒':     { cat: '科技/TMT',  icon: '💻' },
+    '通信':     { cat: '科技/TMT',  icon: '💻' },
+    '煤炭':     { cat: '能源资源',  icon: '⛏️' },
+    '石油石化': { cat: '能源资源',  icon: '⛏️' },
+    '环保':     { cat: '公用事业',  icon: '🔌' },
+    '美容护理': { cat: '大消费',    icon: '🛒' },
+  };
+
+  /* 申万大类图标 */
+  const SW_CAT_ICONS = {
+    '农业':'🌾','能源资源':'⛏️','科技/TMT':'💻','汽车':'🚗','大消费':'🛒',
+    '医药/医疗':'💊','公用事业':'🔌','出行/旅游':'✈️','地产链':'🏠',
+    '大金融':'🏦','新能源':'⚡','工业/制造':'🏭','军工/国防':'🛡️','其他':'📦',
+  };
+
+  function groupSwIntoBig(swL1) {
+    const map = {};
+    for (const item of swL1) {
+      const mapping = SW_BIG_MAP[item.name];
+      const cat = mapping ? mapping.cat : '其他';
+      const icon = SW_CAT_ICONS[cat] || '📦';
+      if (!map[cat]) map[cat] = { name: cat, icon, subs: [], pctSum: 0 };
+      map[cat].subs.push(item);
+      map[cat].pctSum += (item.pct || 0);
+    }
+    const result = Object.values(map).filter(g => g.subs.length > 0);
+    for (const g of result) {
+      g.avgPct = g.pctSum / g.subs.length;
+      g.subs.sort((a, b) => b.pct - a.pct);
+    }
+    return result;
+  }
+
   /* ═══════════════════════════════════════
      State
   ═══════════════════════════════════════ */
@@ -618,43 +682,51 @@
     try {
       let ind, con;
 
+      // ── 优先使用申万一级行业数据（精确分类）──
+      let swL1 = null;
+
       if (!forceRefresh && cachedJson) {
-        // use already-loaded cache
+        swL1 = (cachedJson.sw_l1 || []).length > 0 ? cachedJson.sw_l1 : null;
         ind = cachedJson.industry || [];
         con = cachedJson.concept  || [];
         setBadge('cached', `📁 收盘数据 ${cachedJson.updated}`);
         setUpdateTime(cachedJson.updated);
       } else if (!forceRefresh) {
-        // try loading cache from file
         const c = await loadCachedJson();
-        if (c && (c.industry||[]).length > 0) {
+        if (c && ((c.sw_l1||[]).length > 0 || (c.industry||[]).length > 0)) {
           cachedJson = c;
+          swL1 = (c.sw_l1 || []).length > 0 ? c.sw_l1 : null;
           ind = c.industry || [];
           con = c.concept  || [];
           setBadge('cached', `📁 收盘数据 ${c.updated}`);
           setUpdateTime(c.updated);
         } else {
-          // fallback to live
           forceRefresh = true;
         }
       }
 
       if (forceRefresh) {
-        // live fetch
-        setLoading(true);
         const [rInd, rCon] = await Promise.all([fetchLive('industry'), fetchLive('concept')]);
         ind = parseLive(rInd); con = parseLive(rCon);
         setBadge('live', '📡 实时数据');
         setUpdateTime(new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'}));
       }
 
-      // dedupe
-      const seen = new Set(ind.map(d => d.name));
-      bigMerged = [...ind, ...con.filter(d => !seen.has(d.name))];
-      if (bigMerged.length === 0) throw new Error('获取数据为空');
-
-      renderSummary(bigMerged);
-      renderBigBoard(groupIntoBig(bigMerged));
+      if (swL1 && swL1.length > 0) {
+        // ✅ 申万模式：精确分类，31个行业
+        renderSummary(swL1);
+        renderBigBoard(groupSwIntoBig(swL1));
+        // 标注数据来源
+        const badge = document.getElementById('dataBadge');
+        if (badge) badge.title = '大板块分类使用申万一级行业标准（31个）';
+      } else {
+        // ⚠️ 降级模式：用东财数据 + 关键词匹配
+        const seen = new Set(ind.map(d => d.name));
+        bigMerged = [...ind, ...con.filter(d => !seen.has(d.name))];
+        if (bigMerged.length === 0) throw new Error('获取数据为空');
+        renderSummary(bigMerged);
+        renderBigBoard(groupIntoBig(bigMerged));
+      }
     } catch(e) {
       setError(e.message + '（非交易时段或 API 限流）');
       renderDemoBig();

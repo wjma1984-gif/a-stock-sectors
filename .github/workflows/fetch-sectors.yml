@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install dependencies
+        run: pip install akshare
+
       - name: Fetch sector data
         run: python fetch_sectors.py
 
